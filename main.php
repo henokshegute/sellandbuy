@@ -295,7 +295,6 @@ if (isset($update->message->text)) {
             $coffee_grade = $ro['coffee_grade'];
             $quantity = $ro['quantity'];
             $price = $ro['price'];
-            $picture = $ro['picture'];
             $location = $ro['location'];
         }
         if ($buyer_telegram_id != NULL && $zone == NULL) {
@@ -324,16 +323,13 @@ if (isset($update->message->text)) {
             $priceNumber = (int)$msg;
             $total = $quantityNumber * $priceNumber;
             setTransactionValue($chat_id, "price", "$total");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Picture?");
-        } else if ($price != NULL && $picture == NULL) {
-            setTransactionValue($chat_id, "picture", "$msg");
             confirmTransaction($chat_id);
         }
-        if ($msg == "Confirm Transaction" && $picture != NULL) {
+        if ($msg == "Confirm Transaction" && $price != NULL) {
             saveTransactiondata($chat_id);
             buyerMenu($chat_id);
         }
-        if ($msg == "Dicard Transaction" && $picture != NULL) {
+        if ($msg == "Dicard Transaction" && $price != NULL) {
             $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
             mysqli_query($con, $delettransactionfromtemp);
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Transaction Canceled");

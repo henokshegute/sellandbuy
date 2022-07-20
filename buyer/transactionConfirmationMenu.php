@@ -19,7 +19,6 @@ function confirmTransaction($chat_id)
         $coffee_grade = $ro['coffee_grade'];
         $quantity = $ro['quantity'];
         $price = $ro['price'];
-        $picture = $ro['picture'];
         $location = $ro['location'];
     }
     $marksHTML = "";
