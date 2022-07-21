@@ -12,7 +12,7 @@ function confirmetionreplay($chat_id)
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear Admin, There are a request for registration you need to approve");
     }
     $info = "";
-    $info .= "Your Company detail is sent successfully.";
+    $info .= "Your Company detail successfully sent.";
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $info . "&parse_mode=html");
     disable($chat_id);
 }

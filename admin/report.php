@@ -32,7 +32,7 @@ function report($chat_id)
             buyerAdminMainMenu($chat_id);
         }
     } else {
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There is no transaction performed Today &parse_mode=html");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transaction performed Today &parse_mode=html");
         buyerAdminMainMenu($chat_id);
     }
 }
