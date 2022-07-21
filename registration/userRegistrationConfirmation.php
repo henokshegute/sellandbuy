@@ -3,7 +3,7 @@ function confirmUserData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Admin", "Dicard Admin"));
+    $keyboard = array(array("Confirm Admin", "Discard Admin"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";
@@ -37,7 +37,7 @@ function confirmBuyerUserData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Buyer", "Dicard Buyer"));
+    $keyboard = array(array("Confirm Buyer", "Discard Buyer"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";

@@ -3,7 +3,7 @@ function confirmCompanyData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Company", "Dicard Registration"));
+    $keyboard = array(array("Confirm Company", "Discard Registration"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";
