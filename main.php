@@ -16,9 +16,10 @@ include "admin/report.php";
 include "seller/confirmSellersdata.php";
 include "seller/saveSellerdata.php";
 include "admin/sysownermenu.php";
+include "buyer/searching.php";
 
 
-$botToken = "5409523839:AAFLy2mNXxvRDVTjmZ-pb6Cjy-wUjB-6Fhg";
+$botToken = "5531081309:AAFjvINk0MIM47-2tliFM_osBtnHi3SpXVw";
 $botAPI = "https://api.telegram.org/bot" . $botToken;
 $update = json_decode(file_get_contents('php://input', true));
 $googleMapApi = "http://maps.google.com/maps/api/geocode/json?";
@@ -69,7 +70,6 @@ if (isset($update->message->text)) {
     $transactionRow = mysqli_num_rows($checkTransactionExistanceQuery);
     /////////////////////////////////////////////////////////////////////
     if ($msg == "/start") {
-
         if ($ownerRow > 0) {
             ownerMenu($chat_id);
         } else if ($companyRow > 0) {
@@ -300,8 +300,16 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the process Washed/Unwashed");
         } else if ($origion != NULL && $process == NULL) {
             setTransactionValue($chat_id, "process", "$msg");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the seller name");
-        } else if ($process != NULL && $seller_name == NULL) {
+            search($chat_id);
+        } else if ($msg == "🔍 Search") {
+            $data = http_build_query(['text' => 'Search using the button below', 'chat_id' => $chat_id]);
+            $keyboard = json_encode([
+                "inline_keyboard" => [[
+                    ["text" => "Search", "switch_inline_query_current_chat" => ""],
+                ],], 'resize_keyboard' => true, "one_time_keyboard" => true
+            ]);
+            file_get_contents($botAPI . "/sendMessage?{$data}&reply_markup={$keyboard}");
+        }else if ($process != NULL && $seller_name == NULL) {
             setTransactionValue($chat_id, "seller_name", "$msg");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the coffee grade?");
         } else if ($seller_name != NULL && $coffee_grade == NULL) {
@@ -334,6 +342,7 @@ if (isset($update->message->text)) {
     }
     //////////////////////////////////////////////////////
 
+    //////////////////////////////////////////////////////
 } else if (isset($update->message->contact)) {
     $phonNumber = $update->message->contact->phone_number;
     //$setCompanyValue($chat_id, "phone_number", $phonNumber);
@@ -362,6 +371,27 @@ if (isset($update->message->text)) {
     } else if ($first == "d") {
         delete($id, $chat_id, $message_id);
     }
+} else if (isset($update->inline_query)) {
+    $chatId = $update->inline_query->from->id;
+    $queryId = $update->inline_query->id;
+    $username = $update->inline_query->from->first_name;
+    $qu = $update->inline_query->query;
+    $sql = "select * from sellers where fullname like '%{$qu}%'";
+    $query = mysqli_query($con, $sql);
+    $user = mysqli_num_rows($query);
+    $result = [];
+    $count = 0;
+    while ($user_row = mysqli_fetch_array($query)) {
+        $result[$count] = [
+            "type" => "article", "id" => $count, "title" => $user_row['fullname'],
+            "input_message_content" => array("message_text" => $user_row['fullname'], "parse_mode" => "HTML"),
+            "description" => $user_row['fullname'],
+        ];
+        $count++;
+    }
+    $result = json_encode($result, true);
+    $url = $botAPI . "/answerInlineQuery?inline_query_id=$queryId&results=$result&cache_time=0&switch_pm_text=your results&switch_pm_parameter=123";
+    file_get_contents($url);
 }
 ///////////////////////////////////////
 
