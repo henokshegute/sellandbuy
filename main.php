@@ -309,7 +309,7 @@ if (isset($update->message->text)) {
                 ],], 'resize_keyboard' => true, "one_time_keyboard" => true
             ]);
             file_get_contents($botAPI . "/sendMessage?{$data}&reply_markup={$keyboard}");
-        }else if ($process != NULL && $seller_name == NULL) {
+        } else if ($process != NULL && $seller_name == NULL) {
             setTransactionValue($chat_id, "seller_name", "$msg");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the coffee grade?");
         } else if ($seller_name != NULL && $coffee_grade == NULL) {
@@ -370,6 +370,10 @@ if (isset($update->message->text)) {
         acceptCompany($id, $chat_id, $message_id);
     } else if ($first == "d") {
         delete($id, $chat_id, $message_id);
+    }
+    list($name, $full_name) = explode("_", $update->callback_query->data);
+    if ($name == "v") {
+        previewSeller($full_name, $chat_id);
     }
 } else if (isset($update->inline_query)) {
     $chatId = $update->inline_query->from->id;
