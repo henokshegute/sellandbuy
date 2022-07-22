@@ -15,10 +15,9 @@ function savedata($chat_id)
         $firstname = $ro['firstname'];
         $lastname = $ro['lastname'];
         $woreda = $ro['woreda'];
-        $kebele = $ro['kebele'];
         $role = $ro['role'];
     }
-    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,kebele,role,date_registered) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$kebele','$role','$today') ";
+    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today') ";
     mysqli_query($con, $saveUserdataToMain);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Admin added successfully");
     $deletadmindatafromtemp = "DELETE FROM company_users_temp WHERE telegram_username='$telegram_username'";

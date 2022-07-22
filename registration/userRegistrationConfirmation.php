@@ -17,14 +17,12 @@ function confirmUserData($chat_id)
         $firstname = $ro['firstname'];
         $lastname = $ro['lastname'];
         $woreda = $ro['woreda'];
-        $kebele = $ro['kebele'];
         $role = $ro['role'];
     }
 
     $marksHTML .= "firstname :- " . $firstname;
     $marksHTML .= "lastname :- " . $lastname;
     $marksHTML .= "woreda :- " . $woreda;
-    $marksHTML .= "kebele :- " . $kebele;
     $marksHTML .= "role :- " . $role;
     $marksHTML .= "phonenumber :- " . $phonenumber;
     $hel .= rawurlencode($marksHTML);
