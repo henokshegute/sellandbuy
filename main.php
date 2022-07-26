@@ -2,7 +2,6 @@
 include "Db_connect/connect.php";
 include "registration/companyRegistrationMenu.php";
 include "registration/registrationConfirmation.php";
-//include "admin/systemOwnerMenu.php";
 include "admin/listRequestedCompanyRegistration.php";
 include "admin/respondCompanyRegistration.php";
 include "admin/setValue.php";
@@ -17,6 +16,7 @@ include "seller/confirmSellersdata.php";
 include "seller/saveSellerdata.php";
 include "admin/sysownermenu.php";
 include "buyer/searching.php";
+include "buyer/locationMethod.php";
 
 
 $botToken = "5531081309:AAFjvINk0MIM47-2tliFM_osBtnHi3SpXVw";
@@ -105,7 +105,7 @@ if (isset($update->message->text)) {
 
         if ($msg == "Register") {
             $inserQuery = $con->query("INSERT INTO company_temp(telegram_id,date_registered) VALUES('$chat_id','$today')");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Company name?");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the company name?");
         }
     } else if ($companyRowTemp > 0) {
         while ($ro = mysqli_fetch_array($checkCompanyExistanceTempQuery)) {
@@ -116,10 +116,10 @@ if (isset($update->message->text)) {
         }
         if ($telegram_id != NULL && $company_name == NULL) {
             setCompanyValue($chat_id, "company_name", $msg);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Company G.M name?");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the company G.M name?");
         } else if ($company_name != NULL && $owners_name == NULL) {
             setCompanyValue($chat_id, "owners_name", $msg);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Company G.M phone_number?");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the company G.M phone_number?");
         } else if ($owners_name != NULL && $phone_number == NULL) {
             setCompanyValue($chat_id, "phone_number", $msg);
             confirmCompanyData($chat_id);
@@ -141,7 +141,7 @@ if (isset($update->message->text)) {
     if ($userTempRow < 1) {
         if ($msg == "Register Admin") {
             $inserQuery = $con->query("INSERT INTO company_users_temp(company_telegram_id,date_registered,role) VALUES('$chat_id','$today','admin')");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Admin's Phone number ");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter admin's Phone number ");
         }
     } else if ($userTempRow > 0) {
 
@@ -185,7 +185,7 @@ if (isset($update->message->text)) {
     if ($buyerTempRow < 1) {
         if ($msg == "Register Buyer") {
             $inserQuery = $con->query("INSERT INTO company_users_temp(company_telegram_id,date_registered,role) VALUES('$chat_id','$today','buyer')");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Buyer's Phone number?");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the buyer's Phone number?");
         }
     } else if ($buyerTempRow > 0) {
         while ($ro = mysqli_fetch_array($checkBuyerTempExistanceQuery)) {
@@ -208,7 +208,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the last name?");
         } else if ($firstname != NULL && $lastname == NULL) {
             setUserValue($chat_id, "lastname", $msg);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Buyer's woreda?");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the buyer's woreda?");
         } else if ($lastname != NULL && $woreda == NULL) {
             setUserValue($chat_id, "woreda", $msg);
             confirmBuyerUserData($chat_id);
@@ -220,7 +220,7 @@ if (isset($update->message->text)) {
         if ($msg == "Discard Buyer" && $woreda != NULL) {
             $deletbuyerdatafromtemp = "DELETE FROM company_users_temp WHERE company_telegram_id='$chat_id'";
             mysqli_query($con, $deletbuyerdatafromtemp);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration Canceled");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration canceled");
             buyerAdminMainMenu($chat_id);
         }
     }
@@ -235,6 +235,7 @@ if (isset($update->message->text)) {
             $adminTelegram_id = $ro['admin_telegram_id'];
             $firstname = $ro['firstname'];
             $lastname = $ro['lastname'];
+            $picture = $ro['picture'];
             $woreda = $ro['woreda'];
             $neighborhood = $ro['neighborhood'];
             $phone_number = $ro['phone_number'];
@@ -245,13 +246,13 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the lastname?");
         } else if ($firstname != NULL && $lastname == NULL) {
             setSellersValue($chat_id, "lastname", $msg);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Seller's woreda?");
-        } else if ($lastname != NULL && $woreda == NULL) {
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please add seller's picture");
+        } else if ($picture != NULL && $woreda == NULL) {
             setSellersValue($chat_id, "woreda", $msg);
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the neighbourhood?");
         } else if ($woreda != NULL && $neighborhood  == NULL) {
             setSellersValue($chat_id, "neighborhood", $msg);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter Seller's Phone number");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter seller's Phone number");
         } else if ($neighborhood != NULL && $phone_number == NULL) {
             setSellersValue($chat_id, "phone_number", $msg);
             confirmSeller($chat_id);
@@ -261,9 +262,9 @@ if (isset($update->message->text)) {
             buyerMenu($chat_id);
         }
         if ($msg == "Discard Seller" && $phone_number != NULL) {
-            $deletbuyerdatafromtemp = "DELETE FROM seller_name WHERE admin_telegram_id='$chat_id'";
+            $deletbuyerdatafromtemp = "DELETE FROM sellers_temp WHERE admin_telegram_id='$chat_id'";
             mysqli_query($con, $deletbuyerdatafromtemp);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration Canceled");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration canceled");
             buyerMenu($chat_id);
         }
     }
@@ -275,9 +276,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=confirm your location &reply_markup=" . $reply);
         }
     } else if ($transactionRow > 0) {
-
         while ($ro = mysqli_fetch_array($checkTransactionExistanceQuery)) {
-
             $buyer_telegram_id = $ro['buyer_telegram_id'];
             $zone = $ro['zone'];
             $neighborhood = $ro['neighborhood'];
@@ -329,10 +328,10 @@ if (isset($update->message->text)) {
             saveTransactiondata($chat_id);
             buyerMenu($chat_id);
         }
-        if ($msg == "Dicard Transaction" && $price != NULL) {
+        if ($msg == "Discard Transaction" && $price != NULL) {
             $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
             mysqli_query($con, $delettransactionfromtemp);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Transaction Canceled");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Transaction canceled");
             buyerMenu($chat_id);
         }
     }
@@ -340,8 +339,6 @@ if (isset($update->message->text)) {
     if ($msg == "Report") {
         report($chat_id);
     }
-    //////////////////////////////////////////////////////
-
     //////////////////////////////////////////////////////
 } else if (isset($update->message->contact)) {
     $phonNumber = $update->message->contact->phone_number;
@@ -356,9 +353,10 @@ if (isset($update->message->text)) {
     $transactionlong = $update->message->location->longitude;
     $transactionlat = $update->message->location->latitude;
     $fulllocation = ("$transactionlat,$transactionlong");
-    //$transactionLocation = getAddress($transactionlat, $transactionlong);
+    $transactionLocation = getAddress($transactionlat, $transactionlong);
     $chat_id = $update->message->chat->id;
-    $inserQuery = $con->query("INSERT INTO transaction_temp(buyer_telegram_id,location,transaction_date) VALUES('$chat_id','$fulllocation','$today')");
+
+    $inserQuery = $con->query("INSERT INTO transaction_temp(buyer_telegram_id,location,transaction_date) VALUES('$chat_id','$transactionLocation','$today')");
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone?");
 } else if (isset($update->callback_query->data)) {
 
@@ -396,18 +394,9 @@ if (isset($update->message->text)) {
     $result = json_encode($result, true);
     $url = $botAPI . "/answerInlineQuery?inline_query_id=$queryId&results=$result&cache_time=0&switch_pm_text=your results&switch_pm_parameter=123";
     file_get_contents($url);
+} else if (isset($update->message->photo)) {
+    $pic = $update->message->photo[0]->file_id;
+    $chat_id = $update->message->chat->id;
+    setSellersValue($chat_id, "picture", $pic);
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Woreda?");
 }
-///////////////////////////////////////
-
-// function getAddress($latitude, $longitude)
-// {
-
-//     //google map api url
-//     $url = "http://www.geoplugin.net/extras/location.gp?lat=$latitude&lon=$longitude&format=json";
-
-//     // send http request
-//     $geocode = file_get_contents($url);
-//     $json = json_decode($geocode);
-//     $address = $json->geoplugin_continentName;
-//     return $address;
-// }

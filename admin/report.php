@@ -16,7 +16,6 @@ function report($chat_id)
             $coffee_grade = $ro['coffee_grade'];
             $quantity = $ro['quantity'];
             $price = $ro['price'];
-            $picture = $ro['picture'];
             $transaction_date = $ro['transaction_date'];
             $hel = "<b>TRANSACTION REPORT</b>%0A";
             $marksHTML = "";
@@ -57,6 +56,7 @@ function previewSeller($full_name, $chat_id)
             $adminTelegram_id = $ro['admin_telegram_id'];
             $firstname = $ro['firstname'];
             $lastname = $ro['lastname'];
+            $picture=$ro['picture'];
             $woreda = $ro['woreda'];
             $neighborhood = $ro['neighborhood'];
             $phone_number = $ro['phone_number'];
@@ -69,15 +69,13 @@ function previewSeller($full_name, $chat_id)
             $adminLastname = $row_admin['lastname'];
         }
 
-        $hel = "<b>" . $firstname . " " . $lastname . "</b>%0A";
-        // $marksHTML .= "firstname :- " . strtolower($firstname)  . "%0A";
-        // $marksHTML .= "lastname :- " . strtolower($lastname) . "%0A";
+        $hel = $firstname . " " . $lastname ."%0A";
         $marksHTML .= "Woreda:- " .  strtolower($woreda) . "%0A";
         $marksHTML .= "Neighborhood:- " . strtolower($neighborhood) . "%0A";
         $marksHTML .= "Phone number:-" . strtolower($phone_number) . "%0A";
         $marksHTML .= "Registerd by:-" . strtolower($adminFirstname . " " . $adminLastname) . "%0A";
         $marksHTML .= "Date of registration:-" . strtolower($date_registered) . "%0A";
         $hel .= $marksHTML;
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text="  . $hel . "&parse_mode=html");
+        file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=".$picture."&caption=".$hel); 
     }
 }

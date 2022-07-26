@@ -3,7 +3,7 @@ function confirmTransaction($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Transaction", "Dicard Transaction"));
+    $keyboard = array(array("Confirm Transaction", "Discard Transaction"));
     $marksHTML = "";
     $hel = "<b>Confirm</b>%0A";
     $checkTransactionExistance = "SELECT * FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
