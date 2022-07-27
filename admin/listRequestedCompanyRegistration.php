@@ -19,11 +19,11 @@ function listrequesteduser($chat_id)
             $ownrs_name = $ro['owners_name'];
             $marksHTML = "";
 
-            $marksHTML .= "Company name :- " . $company_name . "%0A";
-            $marksHTML .= "Phone Number :- " .  $phone_number . "%0A";
-            $marksHTML .= "General Manager:- " .  $ownrs_name . "%0A";
+            $marksHTML .= "Company name :- " . strtolower($company_name) . "%0A";
+            $marksHTML .= "Phone Number :- " .  strtolower($phone_number) . "%0A";
+            $marksHTML .= "General Manager:- " . strtolower ($ownrs_name) . "%0A";
             $hel = "<b>Aprove:</b>%0A";
-            $hel .= rawurlencode($marksHTML);
+            $hel .= $marksHTML;
             $acceptCompany = "c ";
             $acceptCompany .=  $telegram_id;
             $delete = "d ";
@@ -35,6 +35,6 @@ function listrequesteduser($chat_id)
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
         }
     else {
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There is no registration requestes for now");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=There is no registration requestes for now");
     }
 }

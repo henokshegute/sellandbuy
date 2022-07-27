@@ -21,15 +21,15 @@ function confirmTransaction($chat_id)
         $location = $ro['location'];
     }
     $marksHTML = "";
-    $marksHTML .= "seller_name :- " . strtolower($seller_name) . "%0A";
-    $marksHTML .= "location :- " . strtolower($location) . "%0A";
-    $marksHTML .= "Zone :- " . strtolower($zone) . "%0A";
-    $marksHTML .= "neighborhood :- " . strtolower($neighborhood) . "%0A";
-    $marksHTML .= "origin:- " . strtolower($origion) . "%0A";
-    $marksHTML .= "process:- " . strtolower($process) . "%0A";
-    $marksHTML .= "coffee_grade:- " . strtolower($coffee_grade) . "%0A";
-    $marksHTML .= "quantity :- " . strtolower($quantity) . "%0A";
-    $marksHTML .= "price per kg :- " . strtolower($price) . "%0A";
+    $marksHTML .= "<b>Seller_name :- </b>" . strtolower($seller_name) . "%0A";
+    $marksHTML .= "<b>Socation :- </b>" . strtolower($location) . "%0A";
+    $marksHTML .= "<b>Zone :- </b>" . strtolower($zone) . "%0A";
+    $marksHTML .= "<b>Neighborhood :- </b>" . strtolower($neighborhood) . "%0A";
+    $marksHTML .= "<b>Origin:- </b>" . strtolower($origion) . "%0A";
+    $marksHTML .= "<b>Process:- </b>" . strtolower($process) . "%0A";
+    $marksHTML .= "<b>Coffee_grade:- </b>" . strtolower($coffee_grade) . "%0A";
+    $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
+    $marksHTML .= "<b>Total price :- </b>" . strtolower($price) . "%0A";
     $hel .= $marksHTML;
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);

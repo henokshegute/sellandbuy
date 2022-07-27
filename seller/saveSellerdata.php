@@ -19,7 +19,7 @@ function saveSellerdata($chat_id)
         $phone_number = $ro['phone_number'];
         $date_registered = $ro['date_registered'];
     }
-    $fullname=$firstname." ".$lastname; 
+    $fullname=strtolower($firstname)." ".strtolower($lastname); 
     $saveSellerDataToMain = "INSERT INTO sellers (admin_telegram_id,firstname,lastname,picture,fullname,woreda,neighborhood,phone_number,date_registered) VALUE('$adminTelegram_id','$firstname','$lastname','$picture','$fullname','$woreda','$neighborhood','$phone_number',' $date_registered') ";
     mysqli_query($con, $saveSellerDataToMain);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=seller successfully Registered");

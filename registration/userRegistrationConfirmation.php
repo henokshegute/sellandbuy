@@ -20,11 +20,11 @@ function confirmUserData($chat_id)
         $role = $ro['role'];
     }
 
-    $marksHTML .= "<b>Firstname :-</b> " . strtolower($firstname)."%0A";
-    $marksHTML .= "<b>Lastname :- </b>" .strtolower($lastname)."%0A";
+    $marksHTML .= "<b>First name :-</b> " . strtolower($firstname)."%0A";
+    $marksHTML .= "<b>Last name :- </b>" .strtolower($lastname)."%0A";
     $marksHTML .= "<b>Woreda :-</b> " . strtolower($woreda)."%0A";
     $marksHTML .= "<b>Role :-</b> " . strtolower($role)."%0A";
-    $marksHTML .= "<b>Phonenumber</b> :- " . strtolower($phonenumber)."%0A";
+    $marksHTML .= "<b>Phone number</b> :- " . strtolower($phonenumber)."%0A";
     $hel .= $marksHTML;
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
@@ -52,11 +52,11 @@ function confirmBuyerUserData($chat_id)
         $role = $ro['role'];
     }
 
-    $marksHTML .= "<b>Firstname :-</b>" . strtolower($firstname) . '%0A';
-    $marksHTML .= "<b>Lastname :-</b> " . strtolower($lastname) . '%0A';
+    $marksHTML .= "<b>First name :-</b>" . strtolower($firstname) . '%0A';
+    $marksHTML .= "<b>Last name :-</b> " . strtolower($lastname) . '%0A';
     $marksHTML .= "<b>Woreda :-</b> " . strtolower($woreda) . '%0A';
     $marksHTML .= "<b>Role :-</b> " . strtolower($role) . '%0A';
-    $marksHTML .= "<b>Phonenumber :-</b> " . strtolower($phonenumber) . '%0A';
+    $marksHTML .= "<b>Phone number :-</b> " . strtolower($phonenumber) . '%0A';
     $hel .= $marksHTML;
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);

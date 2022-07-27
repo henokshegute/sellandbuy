@@ -28,8 +28,9 @@ function report($chat_id)
             $viewSeller = "v_";
             $viewSeller .=  $seller_name;
             $keyboard = json_encode(["inline_keyboard" => [[
-                ["text" => " ðŸ‘“ View seller", "callback_data" => $viewSeller],
+                ["text" => " 👓 View seller", "callback_data" => $viewSeller],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
+            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id. "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
         }
         buyerAdminMainMenu($chat_id);
@@ -55,7 +56,7 @@ function previewSeller($full_name, $chat_id)
             $adminTelegram_id = $ro['admin_telegram_id'];
             $firstname = $ro['firstname'];
             $lastname = $ro['lastname'];
-            $picture = $ro['picture'];
+            $picture=$ro['picture'];
             $woreda = $ro['woreda'];
             $neighborhood = $ro['neighborhood'];
             $phone_number = $ro['phone_number'];
@@ -68,13 +69,13 @@ function previewSeller($full_name, $chat_id)
             $adminLastname = $row_admin['lastname'];
         }
 
-        $hel = $firstname . " " . $lastname . "%0A";
-        $marksHTML .= "<b>Woreda:- </b>" .  strtolower($woreda) . "%0A";
-        $marksHTML .= "<b>Neighborhood:-</b> " . strtolower($neighborhood) . "%0A";
-        $marksHTML .= "<b>Phone number:-</b>" . strtolower($phone_number) . "%0A";
-        $marksHTML .= "<b>Registerd by:-</b>" . strtolower($adminFirstname . " " . $adminLastname) . "%0A";
-        $marksHTML .= "<b>Date of registration:-</b>" . strtolower($date_registered) . "%0A";
+        $hel = strtolower($firstname) . " " . strtolower($lastname )."%0A";
+        $marksHTML .= "Woreda:- " .  strtolower($woreda) . "%0A";
+        $marksHTML .= "Neighborhood:- " . strtolower($neighborhood) . "%0A";
+        $marksHTML .= "Phone number:-" . strtolower($phone_number) . "%0A";
+        $marksHTML .= "Registerd by:-" . strtolower($adminFirstname . " " . $adminLastname) . "%0A";
+        $marksHTML .= "Date of registration:-" . strtolower($date_registered) . "%0A";
         $hel .= $marksHTML;
-        file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel);
+        file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=".$picture."&caption=".$hel); 
     }
 }

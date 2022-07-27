@@ -21,14 +21,14 @@ function confirmSeller($chat_id)
         $date_registered = $ro['date_registered'];
     }
     $marksHTML = "";
-    $marksHTML .= "<b>Firstname :- </b>" . strtolower($firstname) . "%0A";
-    $marksHTML .= "<b>Lastname:- </b>" . strtolower($lastname) . "%0A";
-    $marksHTML .= "<b>Woreda:-</b> " . strtolower($woreda) . "%0A";
-    $marksHTML .= "<b>Neighborhood:- </b>" . strtolower($neighborhood) . "%0A";
-    $marksHTML .= "<b>Phone number :- </b>" . strtolower($phone_number) . "%0A";
-    $marksHTML .= "<b>Date :-</b> " . strtolower($date_registered) . "%0A";
+    $marksHTML .= "First name :- " . strtolower($firstname) . "%0A";
+    $marksHTML .= "Last name:- " . strtolower($lastname) . "%0A";
+    $marksHTML .= "Woreda:-</b> " . strtolower($woreda) . "%0A";
+    $marksHTML .= "Neighborhood:- " . strtolower($neighborhood) . "%0A";
+    $marksHTML .= "Phone number :- " . strtolower($phone_number) . "%0A";
+    $marksHTML .= "Date :- " . strtolower($date_registered) . "%0A";
     $hel .= $marksHTML;
-   file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=".$picture."&caption=".$hel); 
+    file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=".$picture."&caption=".$hel); 
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please Confirm: &reply_markup=" . $reply);
