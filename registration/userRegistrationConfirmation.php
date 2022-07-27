@@ -3,7 +3,7 @@ function confirmUserData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Admin", "Discard Admin"));
+    $keyboard = array(array("Confirm New Admin", "Discard New Admin"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";
@@ -20,12 +20,12 @@ function confirmUserData($chat_id)
         $role = $ro['role'];
     }
 
-    $marksHTML .= "firstname :- " . $firstname;
-    $marksHTML .= "lastname :- " . $lastname;
-    $marksHTML .= "woreda :- " . $woreda;
-    $marksHTML .= "role :- " . $role;
-    $marksHTML .= "phonenumber :- " . $phonenumber;
-    $hel .= rawurlencode($marksHTML);
+    $marksHTML .= "<b>Firstname :-</b> " . strtolower($firstname)."%0A";
+    $marksHTML .= "<b>Lastname :- </b>" .strtolower($lastname)."%0A";
+    $marksHTML .= "<b>Woreda :-</b> " . strtolower($woreda)."%0A";
+    $marksHTML .= "<b>Role :-</b> " . strtolower($role)."%0A";
+    $marksHTML .= "<b>Phonenumber</b> :- " . strtolower($phonenumber)."%0A";
+    $hel .= $marksHTML;
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
@@ -35,7 +35,7 @@ function confirmBuyerUserData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Buyer", "Discard Buyer"));
+    $keyboard = array(array("Confirm New Buyer", "Discard New Buyer"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";
@@ -52,11 +52,11 @@ function confirmBuyerUserData($chat_id)
         $role = $ro['role'];
     }
 
-    $marksHTML .= "firstname :- " . strtolower($firstname) . '%0A';
-    $marksHTML .= "lastname :- " . strtolower($lastname) . '%0A';
-    $marksHTML .= "woreda :- " . strtolower($woreda) . '%0A';
-    $marksHTML .= "role :- " . strtolower($role) . '%0A';
-    $marksHTML .= "phonenumber :- " . strtolower($phonenumber) . '%0A';
+    $marksHTML .= "<b>Firstname :-</b>" . strtolower($firstname) . '%0A';
+    $marksHTML .= "<b>Lastname :-</b> " . strtolower($lastname) . '%0A';
+    $marksHTML .= "<b>Woreda :-</b> " . strtolower($woreda) . '%0A';
+    $marksHTML .= "<b>Role :-</b> " . strtolower($role) . '%0A';
+    $marksHTML .= "<b>Phonenumber :-</b> " . strtolower($phonenumber) . '%0A';
     $hel .= $marksHTML;
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
