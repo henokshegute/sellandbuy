@@ -137,7 +137,6 @@ function reportByContract($chat_id, $msg)
                 ["text" => " 👓 View Seller", "callback_data" => $viewSeller],
                 ["text" => " 📍 View Location", "callback_data" => $viewLocation],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
-            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id. "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
         }
         buyerAdminMainMenu($chat_id);

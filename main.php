@@ -23,7 +23,7 @@ include "buyer/locationMethod.php";
 include "buyer/coffeeContract.php";
 
 
-$botToken = "";
+$botToken = "5531081309:AAFjvINk0MIM47-2tliFM_osBtnHi3SpXVw";
 $botAPI = "https://api.telegram.org/bot" . $botToken;
 $update = json_decode(file_get_contents('php://input', true));
 $googleMapApi = "http://maps.google.com/maps/api/geocode/json?";
@@ -325,7 +325,9 @@ if (isset($update->message->text)) {
             setTransactionValue($chat_id, "process", "$msg");
             search($chat_id);
         } else if ($msg == "🔍 Search") {
-            $data = http_build_query(['text' => 'Search using the button below', 'chat_id' => $chat_id]);
+            $data = http_build_query(['text' => 'Search seller using the button below.
+            If the seller is not registerd press cancel from the menu with three bars on the left. 
+            And register him/her before the transaction.', 'chat_id' => $chat_id]);
             $keyboard = json_encode([
                 "inline_keyboard" => [[
                     ["text" => "Search", "switch_inline_query_current_chat" => ""],
@@ -421,6 +423,12 @@ if (isset($update->message->text)) {
     }
     if ($msg == 'Approve Price') {
         listRequestedPrice($chat_id);
+    }
+    if ($msg == '/cancel') {
+        $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
+        mysqli_query($con, $delettransactionfromtemp);
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Canceled!");
+        buyerMenu($chat_id);
     }
     //////////////////////////////////////////////////////
 } else if (isset($update->message->contact)) {

@@ -29,9 +29,3 @@ function setPriceValue($id, $key, $temp)
     $now = "UPDATE price_temp SET $key ='$temp' WHERE telegram_id='$id'";
     mysqli_query($con, $now);
 }
-function setReportValue($id, $key, $temp)
-{
-    global $con;
-    $now = "UPDATE report SET $key ='$temp' WHERE telegram_id='$id'";
-    mysqli_query($con, $now);
-}

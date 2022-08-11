@@ -20,7 +20,7 @@ function  companyAdminMainMenu($chat_id)
 function buyerAdminMainMenu($chat_id)
 {
     global $botAPI;
-    $keyboard = array(array("Register New Buyer"), array("Report", "Request Price"));
+    $keyboard = array(array("Register New Buyer","Add New Seller"), array("Report", "Request Price"));
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text= Welcome &reply_markup=" . $reply);
