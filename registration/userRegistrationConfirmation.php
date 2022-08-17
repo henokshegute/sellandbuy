@@ -35,7 +35,7 @@ function confirmBuyerUserData($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm New Buyer", "Discard New Buyer"));
+    $keyboard = array(array("Confirm Scale Man", "Discard Scale Man"));
     $marksHTML = "";
     $marksHTMLL = "";
     $hel = "<b>Confirm</b>%0A";

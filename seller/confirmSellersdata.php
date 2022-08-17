@@ -3,7 +3,7 @@ function confirmSeller($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm Scale Man", "Discard Scale Man"));
+    $keyboard = array(array("Confirm New Seller", "Discard New Seller"));
     $marksHTML = "";
     $hel = "DETAIL %0A";
     $checkSellerTempExistance = "SELECT * FROM sellers_temp WHERE admin_telegram_id ='$chat_id'";

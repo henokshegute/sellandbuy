@@ -146,12 +146,13 @@ if (isset($update->message->text)) {
         }
     }
     //////////////////////////////////
-    if ($msg == "Approve Company") {
-        listrequesteduser($chat_id);
+    if ($msg == "Approve Company" && $ownerRow > 0) {
+            listrequesteduser($chat_id);
     }
     //////////////////////Register USer InTO the company//////////////////////////////////////
 
-    if ($userTempRow < 1) {
+    if ($userTempRow < 1 && $companyRow > 0) {
+        
         if ($msg == "Register Admin") {
             $inserQuery = $con->query("INSERT INTO company_users_temp(company_telegram_id,date_registered,role) VALUES('$chat_id','$today','admin')");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the admin's phone number ");
@@ -197,7 +198,7 @@ if (isset($update->message->text)) {
     }
     ///////////////////Register Buyer/////////////////////////
     if ($buyerTempRow < 1) {
-        if ($msg == "Register New Buyer") {
+        if ($msg == "Register Scale Man") {
             $inserQuery = $con->query("INSERT INTO company_users_temp(company_telegram_id,date_registered,role) VALUES('$chat_id','$today','buyer')");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the buyer's phone number?");
         }
@@ -228,11 +229,11 @@ if (isset($update->message->text)) {
             setUserValue($chat_id, "woreda", $msg);
             confirmBuyerUserData($chat_id);
         }
-        if ($msg == "Confirm New Buyer" && $woreda != NULL) {
+        if ($msg == "Confirm Scale Man" && $woreda != NULL) {
             savebuyerdata($chat_id);
             buyerAdminMainMenu($chat_id);
         }
-        if ($msg == "Discard New Buyer" && $woreda != NULL) {
+        if ($msg == "Discard Scale Man" && $woreda != NULL) {
             $deletbuyerdatafromtemp = "DELETE FROM company_users_temp WHERE company_telegram_id='$chat_id'";
             mysqli_query($con, $deletbuyerdatafromtemp);
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration canceled");
@@ -241,7 +242,7 @@ if (isset($update->message->text)) {
     }
     ///////////////////////Register Seller///////////////////////////////
     if ($sellerRow < 1) {
-        if ($msg == "Add Scale Man") {
+        if ($msg == "Add New Seller") {
             $inserQuery = $con->query("INSERT INTO sellers_temp(admin_telegram_id,date_registered) VALUES('$chat_id','$today')");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter his/her first name?");
         }
@@ -281,7 +282,7 @@ if (isset($update->message->text)) {
             setSellersValue($chat_id, "phone_number", $msg);
             confirmSeller($chat_id);
         }
-        if ($msg == "Confirm Scale Man" && $phone_number != NULL) {
+        if ($msg == "Confirm New Seller" && $phone_number != NULL) {
             saveSellerdata($chat_id);
             if ($AdminRow > 0) {
                 buyerAdminMainMenu($chat_id);
@@ -289,7 +290,7 @@ if (isset($update->message->text)) {
                 buyerMenu($chat_id);
             }
         }
-        if ($msg == "Discard Scale Man" && $phone_number != NULL) {
+        if ($msg == "Discard New Seller" && $phone_number != NULL) {
             $deletbuyerdatafromtemp = "DELETE FROM sellers_temp WHERE admin_telegram_id='$chat_id'";
             mysqli_query($con, $deletbuyerdatafromtemp);
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Registration canceled");
