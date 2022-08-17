@@ -20,7 +20,7 @@ function acceptCompany($id, $chat_id, $message_id)
         mysqli_query($con, $updateCompanyTable);
         $del = "DELETE FROM company_temp WHERE telegram_id='$id'";
         mysqli_query($con, $del);
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $id . "&text=You are registerd successfully !!!");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $id . "&text=Your registration request have been approved. Please press the" . " " . "/start" . " " . "command from the left hand-side menu with three bars.");
         $approve_as_user = "c ";
         $approve_as_user .= $chat_id;
         $keyboard = json_encode(["inline_keyboard" => [[

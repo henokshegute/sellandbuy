@@ -21,5 +21,5 @@ function priceConfirmation($chat_id)
     $hel .= $marksHTML;
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&reply_markup=" . $reply."&parse_mode=html");
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&reply_markup=" . $reply . "&parse_mode=html");
 }

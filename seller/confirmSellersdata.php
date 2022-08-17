@@ -3,7 +3,7 @@ function confirmSeller($chat_id)
 {
     global $botAPI;
     global $con;
-    $keyboard = array(array("Confirm New Seller", "Discard New Seller"));
+    $keyboard = array(array("Confirm Scale Man", "Discard Scale Man"));
     $marksHTML = "";
     $hel = "DETAIL %0A";
     $checkSellerTempExistance = "SELECT * FROM sellers_temp WHERE admin_telegram_id ='$chat_id'";
@@ -25,7 +25,7 @@ function confirmSeller($chat_id)
     $marksHTML = "";
     $marksHTML .= "First name :- " . strtolower($firstname) . "%0A";
     $marksHTML .= "Last name:- " . strtolower($lastname) . "%0A";
-    $marksHTML .= "Woreda:-</b> " . strtolower($woreda) . "%0A";
+    $marksHTML .= "Woreda:- " . strtolower($woreda) . "%0A";
     $marksHTML .= "Neighborhood:- " . strtolower($neighborhood) . "%0A";
     $marksHTML .  "Land size:- " . strtolower($landsize) . "%0A";
     $marksHTML .  "Number of tree:- " . strtolower($number_of_tree) . "%0A";

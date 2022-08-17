@@ -23,9 +23,9 @@ function setSellersValue($id, $key, $temp)
     $now = "UPDATE sellers_temp SET $key ='$temp' WHERE admin_telegram_id='$id'";
     mysqli_query($con, $now);
 }
-function setPriceValue($id, $key, $temp)
+function setPriceValue($id, $key, $temp, $priceId)
 {
     global $con;
-    $now = "UPDATE price_temp SET $key ='$temp' WHERE telegram_id='$id'";
+    $now = "UPDATE price_temp SET $key ='$temp' WHERE telegram_id='$id' && id='$priceId' ";
     mysqli_query($con, $now);
 }
