@@ -1,4 +1,6 @@
+
 <?php
+
 $database = 'coffee_collecting_system';
 $host = 'localhost';
 $user = 'root';

@@ -5,7 +5,6 @@ function coffeeContractMenu($chat_id)
     global $botAPI;
     $coffeeContract = "SELECT * FROM coffee_contract";
     $coffeeContractQuery = mysqli_query($con, $coffeeContract);
-    $ro = mysqli_fetch_array($coffeeContractQuery);
     $coffeeContractQuantity = mysqli_num_rows($coffeeContractQuery);
     $contract_name_array = [];
     $contractMain = [];
@@ -18,7 +17,7 @@ function coffeeContractMenu($chat_id)
         $keyboard = $contractMain;
         $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
         $reply = json_encode($resp);
-        $message = "Please select the coffee contract from the list";
+        $message = "Please select farm from the menu";
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $message . "&reply_markup=" . $reply);
     }
 }
@@ -29,5 +28,14 @@ function washedUnwashed($chat_id)
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     $message = "Please enter the process Washed/Unwashed";
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $message . "&reply_markup=" . $reply);
+}
+function confirmFarm($chat_id)
+{
+    global $botAPI;
+    $keyboard = array(array("Confirm Farm", "Discard Farm"));
+    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
+    $reply = json_encode($resp);
+    $message = "Please confirm";
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $message . "&reply_markup=" . $reply);
 }

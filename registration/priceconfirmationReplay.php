@@ -12,7 +12,7 @@ function priceConfirmationReply($chat_id)
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear Admin, There are a request for registration you need to approve");
     }
     $info = "";
-    $info .= "Your price request have successfully been sent.";
+    $info .= "Your price request have been sent.";
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $info . "&parse_mode=html");
     buyerAdminMainMenu($chat_id);
 }
