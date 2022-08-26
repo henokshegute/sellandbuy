@@ -15,7 +15,7 @@ function reportAll($chat_id)
             $location = $ro['location'];
             $longtiude = $ro['longitude'];
             $latitude = $ro['latitude'];
-            // $coffee_grade = $ro['coffee_grade'];
+            $coffee_contract = $ro['contract_name'];
             $quantity = $ro['quantity'];
             $price = $ro['price'];
             $total = $ro['total'];
@@ -25,7 +25,7 @@ function reportAll($chat_id)
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
             $marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
-            //$marksHTML .= "<b>Coffee_grade:-</b> " . strtolower($coffee_grade) . "%0A";
+            $marksHTML .= "<b>Farm:-</b> " . strtolower($coffee_contract) . "%0A";
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg price :-</b> " . strtolower($price) . "%0A";
             $marksHTML .= "<b>Total price:- </b>" . strtolower($total) . "%0A";

@@ -29,7 +29,7 @@ function savebuyerdata($chat_id)
     global $con;
     date_default_timezone_set('Africa/Addis_Ababa');
     $today = date('y-m-d');
-    $checkUserTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id ='$chat_id' && role='buyer'";
+    $checkUserTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id ='$chat_id' && role='scale man'";
     $checkUserTempExistanceQuery = mysqli_query($con, $checkUserTempExistance);
 
     while ($ro = mysqli_fetch_array($checkUserTempExistanceQuery)) {
@@ -43,7 +43,7 @@ function savebuyerdata($chat_id)
     }
     $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today') ";
     mysqli_query($con, $saveUserdataToMain);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Buyer added successfully");
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Scale man added successfully");
     $deletadmindatafromtemp = "DELETE FROM company_users_temp WHERE telegram_username='$telegram_username'";
     mysqli_query($con, $deletadmindatafromtemp);
 }

@@ -25,7 +25,7 @@ function saveSellerdata($chat_id)
     $saveSellerDataToMain = "INSERT INTO sellers (admin_telegram_id,firstname,lastname,picture,fullname,woreda,neighborhood,land_size,number_of_tree,phone_number,date_registered) 
     VALUE('$adminTelegram_id','$firstname','$lastname','$picture','$fullname','$woreda','$neighborhood','$landsize','$number_of_tree','$phone_number',' $date_registered') ";
     mysqli_query($con, $saveSellerDataToMain);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=seller successfully Registered");
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Seller Successfully Registered");
     $delettransactionfromtemp = "DELETE FROM sellers_temp WHERE admin_telegram_id='$chat_id'";
     mysqli_query($con, $delettransactionfromtemp);
 }

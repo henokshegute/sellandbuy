@@ -9,7 +9,7 @@ function confirmetionreplay($chat_id)
     while ($ro = mysqli_fetch_array($systemOwnerQuery)) {
 
         $admin_id = $ro['telegram_id'];
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear Admin, There are a request for registration you need to approve");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear System Admin, There are a request for registration you need to approve");
     }
     disable($chat_id);
 }

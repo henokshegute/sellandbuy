@@ -21,10 +21,10 @@ function listrequesteduser($chat_id)
 
             $marksHTML .= "Company name :- " . strtolower($company_name) . "%0A";
             $marksHTML .= "Phone Number :- " .  strtolower($phone_number) . "%0A";
-            $marksHTML .= "General Manager:- " . strtolower ($ownrs_name) . "%0A";
+            $marksHTML .= "General Manager:- " . strtolower($ownrs_name) . "%0A";
             $hel = "<b>Aprove:</b>%0A";
             $hel .= $marksHTML;
-            $acceptCompany = "c ";
+            $acceptCompany = "e ";
             $acceptCompany .=  $telegram_id;
             $delete = "d ";
             $delete .= $telegram_id;

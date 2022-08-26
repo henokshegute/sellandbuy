@@ -29,6 +29,12 @@ function setPriceValue($id, $key, $temp, $priceId)
     $now = "UPDATE price_temp SET $key ='$temp' WHERE telegram_id='$id' && id='$priceId' ";
     mysqli_query($con, $now);
 }
+function setEditPrice($id, $key, $temp, $priceId)
+{
+    global $con;
+    $now = "UPDATE edit_price SET $key ='$temp' WHERE telegram_id='$id' && id='$priceId' ";
+    mysqli_query($con, $now);
+}
 function setFarmValue($id, $key, $temp)
 {
     global $con;
