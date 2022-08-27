@@ -86,7 +86,7 @@ function declinePrice($id, $chat_id, $message_id)
     $marksHTML = "";
     $marksHTML .= "<b>Farm name:- </b>" . strtolower($contract_name) . "%0A";
     $marksHTML .= "<b>Requested price:-</b>" . strtolower($price) . "%0A";
-    $marksHTML .= "Price request is not approved!!!" . "%0A";
+    $marksHTML .= "Price request is not approved, please contact owner." . "%0A";
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $id . "&text= " . $marksHTML . "&parse_mode=html");
     $del = "DELETE FROM price_temp WHERE telegram_id='$id' && id='$priceid'";
     mysqli_query($con, $del);
@@ -109,12 +109,12 @@ function changeprice($id, $chat_id, $message_id)
 
         $priceid = $ro['id'];
         $telegram_id = $ro['telegram_id'];
-        $admin_telegram_id=$ro['admin_telegram_id'];
+        $admin_telegram_id = $ro['admin_telegram_id'];
         $price = $ro['price'];
         $contract_name = $ro['contract_name'];
         $date_registered = $ro['date_registered'];
     }
     $con->query("INSERT INTO edit_price(telegram_id,admin_telegram_id,contract_name,date_registered) VALUES('$chat_id',$id,'$contract_name','$today')");
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the change in price"); 
-    $con->query( "DELETE FROM price_temp WHERE telegram_id='$id' && id='$priceid'");
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the change in price.");
+    $con->query("DELETE FROM price_temp WHERE telegram_id='$id' && id='$priceid'");
 }

@@ -19,8 +19,8 @@ function confirmCompanyData($chat_id)
     $marksHTML .= "Phone Number :- " . strtolower($phone_number) . "%0A";
     $marksHTML .= "General Manager:- " . strtolower($ownrs_name) . "%0A";
     $hel .= $marksHTML;
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html");
+   
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please Confirm: &reply_markup=" . $reply);
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html"."&reply_markup=" . $reply);
 }

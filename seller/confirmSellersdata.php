@@ -32,8 +32,7 @@ function confirmSeller($chat_id)
     $marksHTML .= "Phone number :- " . strtolower($phone_number) . "%0A";
     $marksHTML .= "Date :- " . strtolower($date_registered) . "%0A";
     $hel .= $marksHTML;
-    file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel);
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please Confirm: &reply_markup=" . $reply);
+    file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup=" . $reply);
 }

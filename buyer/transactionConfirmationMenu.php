@@ -34,9 +34,7 @@ function confirmTransaction($chat_id)
     $marksHTML .= "<b>1kg price :- </b>" . strtolower($price) . "%0A";
     $marksHTML .= "<b>Total price :- </b>" . strtolower($total) . "%0A";
     $hel .= $marksHTML;
-    // file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel."&reply_markup={$keyboard}");
-    file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&parse_mode=html");
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please Confirm: &reply_markup=" . $reply);
+    file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&parse_mode=html" . "&reply_markup=" . $reply);
 }
