@@ -45,7 +45,7 @@ function reportAll($chat_id)
         }
         buyerAdminMainMenu($chat_id);
     } else {
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transaction performed Today &parse_mode=html");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed today &parse_mode=html");
         buyerAdminMainMenu($chat_id);
     }
 }
@@ -146,7 +146,7 @@ function reportByContract($chat_id, $msg)
         }
         buyerAdminMainMenu($chat_id);
     } else {
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transaction performed with this coffee contract &parse_mode=html");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed with this farm &parse_mode=html");
         buyerAdminMainMenu($chat_id);
     }
 }

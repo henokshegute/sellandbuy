@@ -9,7 +9,7 @@ function priceConfirmationReply($chat_id)
     while ($ro = mysqli_fetch_array($companyOwnerQuery)) {
 
         $admin_id = $ro['telegram_id'];
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear Owner,There is a price request you need to approve.");
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $admin_id . "&text=Dear Owner, There is a price request you need to approve.");
     }
     $info = "";
     $info .= "Your price request have been sent.";

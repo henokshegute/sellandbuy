@@ -58,7 +58,8 @@ function accept($id, $chat_id, $message_id)
     $marksHTML = "";
     $marksHTML .= "<b>Farm name:- </b>" . strtolower($contract_name) . "%0A";
     $marksHTML .= "<b>Requested price:-</b>" . strtolower($price) . "%0A";
-    $marksHTML .= "Price request is approved!!!" . "%0A";
+    $marksHTML .= "Price request is approved." . "%0A";
+    $marksHTML.="NOTE:- This price is only valid for 30 days.";
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $id . "&text= " . $marksHTML . "&parse_mode=html");
     $approve_as_user = "a ";
     $approve_as_user .= $chat_id;

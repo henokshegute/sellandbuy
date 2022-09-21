@@ -23,6 +23,16 @@ function setSellersValue($id, $key, $temp)
     $now = "UPDATE sellers_temp SET $key ='$temp' WHERE admin_telegram_id='$id'";
     mysqli_query($con, $now);
 }
+function editSellersValue($id, $key, $temp)
+{
+    global $con;
+    global $update;
+    $chat_id = $update->message->chat->id;
+    $now = "UPDATE sellers SET $key ='$temp' WHERE editor_id='$id'";
+    mysqli_query($con, $now);
+    // $updateTransactionquantity = "UPDATE transaction_temp SET quantity= NULL WHERE buyer_telegram_id ='$chat_id'";
+    // $updateTransactionquantityquery = mysqli_query($con, $updateTransactionquantity);
+}
 function setPriceValue($id, $key, $temp, $priceId)
 {
     global $con;

@@ -17,9 +17,19 @@ function savedata($chat_id)
         $woreda = $ro['woreda'];
         $role = $ro['role'];
     }
-    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today') ";
+    $selectownerscompany = "SELECT * FROM company where telegram_id='$chat_id'";
+    $selectownerscompanyQuery = mysqli_query($con, $selectownerscompany);
+    while ($co = mysqli_fetch_array($selectownerscompanyQuery)) {
+        $companyName = $co['company_name'];
+    }
+    $pass = 123456789;
+    $passhash = password_hash("$pass", PASSWORD_DEFAULT);
+    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered,company_name,password) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today','$companyName','$passhash') ";
     mysqli_query($con, $saveUserdataToMain);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Admin added successfully");
+    $conc = "Dear Owner, " . "%0A";
+    $roleBold = "<b>$role</b>";
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $conc . "Please forward the message below to this username @" . $telegram_username);
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please user you have been registered as " . $roleBold . " for ($companyName). In order to access the bot please click the following link. @MytrstingBot &parse_mode=html");
     $deletadmindatafromtemp = "DELETE FROM company_users_temp WHERE telegram_username='$telegram_username'";
     mysqli_query($con, $deletadmindatafromtemp);
 }
@@ -41,9 +51,17 @@ function savebuyerdata($chat_id)
         $woreda = $ro['woreda'];
         $role = $ro['role'];
     }
-    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today') ";
+    $selectownerscompany = "SELECT * FROM company where telegram_id='$companyTelegram_id'";
+    $selectownerscompanyQuery = mysqli_query($con, $selectownerscompany);
+    while ($co = mysqli_fetch_array($selectownerscompanyQuery)) {
+        $companyName = $co['company_name'];
+    }
+    $saveUserdataToMain = "INSERT INTO company_users (company_telegram_id,phone_number,telegram_username,firstname,lastname,woreda,role,date_registered,company_name) VALUE('$companyTelegram_id','$phonenumber','$telegram_username','$firstname','$lastname','$woreda','$role','$today','$companyName') ";
     mysqli_query($con, $saveUserdataToMain);
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Scale man added successfully");
+    $conc = "Dear Admin, " . "%0A";
+    $roleBold = "<b>$role</b>";
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $conc . "Please forward the message below to this username @$telegram_username.");
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please user you have been registered as " . $roleBold . " for $companyName company. In order to access the bot please click the following  link. @MytrstingBot&parse_mode=html");
     $deletadmindatafromtemp = "DELETE FROM company_users_temp WHERE telegram_username='$telegram_username'";
     mysqli_query($con, $deletadmindatafromtemp);
 }

@@ -5,7 +5,7 @@ function disable($chat_id)
     $keyboard = array(array(" "));
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    $info = "Your company details have been successfully received. Please await response.";
+    $info = "Your company details have been successfully received. Please await authorization.";
 
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $info . "&reply_markup=" . $reply);
 }
