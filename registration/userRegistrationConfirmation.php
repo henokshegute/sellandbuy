@@ -62,3 +62,36 @@ function confirmBuyerUserData($chat_id)
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html" . "&reply_markup=" . $reply);
 }
+function confirmFarmAdminsData($chat_id)
+{
+    global $botAPI;
+    global $con;
+    $keyboard = array(array("Confirm Farm Admin", "Discard Farm Admin"));
+    $marksHTML = "";
+    $marksHTMLL = "";
+    $hel = "<b>Confirm</b>%0A";
+    $checkUserTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id'";
+    $checkUserTempExistanceQuery = mysqli_query($con, $checkUserTempExistance);
+
+    while ($ro = mysqli_fetch_array($checkUserTempExistanceQuery)) {
+        $companyTelegram_id = $ro['company_telegram_id'];
+        $phonenumber = $ro['phone_number'];
+        $telegram_username = $ro['telegram_username'];
+        $firstname = $ro['firstname'];
+        $lastname = $ro['lastname'];
+        $woreda = $ro['woreda'];
+        $role = $ro['role'];
+        $assigned_farm = $ro['assigned_farm'];
+    }
+
+    $marksHTML .= "<b>First name :-</b>" . strtolower($firstname) . '%0A';
+    $marksHTML .= "<b>Last name :-</b> " . strtolower($lastname) . '%0A';
+    $marksHTML .= "<b>Woreda :-</b> " . strtolower($woreda) . '%0A';
+    $marksHTML .= "<b>Role :-</b> " . strtolower($role) . '%0A';
+    $marksHTML .= "<b>Assigned At :-</b> " . strtolower($assigned_farm) . '%0A';
+    $marksHTML .= "<b>Phone number :-</b> " . strtolower($phonenumber) . '%0A';
+    $hel .= $marksHTML;
+    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
+    $reply = json_encode($resp);
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "%20" . $marksHTMLL . "&parse_mode=html" . "&reply_markup=" . $reply);
+}

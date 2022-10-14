@@ -1,8 +1,21 @@
 <?php
 function reportAll($chat_id)
 {
+
     global $botAPI;
     global $con;
+    $update = json_decode(file_get_contents('php://input', true));
+    $tguser = $update->message->from->username;
+    $checkUserExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='super admin'";
+    $checkUserExistanceQuery = mysqli_query($con, $checkUserExistance);
+    $AdminRow = mysqli_num_rows($checkUserExistanceQuery);
+    ////////////////////////////////
+    $checkFarmadminExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='admin'";
+    $checkFarmadminExistanceQuery = mysqli_query($con, $checkFarmadminExistance);
+    $FarmAdminRow = mysqli_num_rows($checkFarmadminExistanceQuery);
+    ////////////////////////////////
+
+
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
     $listDailyTransaction = "SELECT * FROM transaction where transaction_date= '$today'";
@@ -43,10 +56,18 @@ function reportAll($chat_id)
             // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
             file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
         }
-        buyerAdminMainMenu($chat_id);
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
     } else {
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed today &parse_mode=html");
-        buyerAdminMainMenu($chat_id);
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
     }
 }
 function previewSeller($half, $chat_id)
@@ -106,6 +127,16 @@ function reportByContract($chat_id, $msg)
 {
     global $botAPI;
     global $con;
+    $update = json_decode(file_get_contents('php://input', true));
+    $tguser = $update->message->from->username;
+    $checkUserExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='super admin'";
+    $checkUserExistanceQuery = mysqli_query($con, $checkUserExistance);
+    $AdminRow = mysqli_num_rows($checkUserExistanceQuery);
+    ////////////////////////////////
+    $checkFarmadminExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='admin'";
+    $checkFarmadminExistanceQuery = mysqli_query($con, $checkFarmadminExistance);
+    $FarmAdminRow = mysqli_num_rows($checkFarmadminExistanceQuery);
+    ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
     $listDailyTransaction = "SELECT * FROM transaction where transaction_date= '$today' && contract_name='$msg'";
@@ -144,9 +175,192 @@ function reportByContract($chat_id, $msg)
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
             file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
         }
-        buyerAdminMainMenu($chat_id);
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
     } else {
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed with this farm &parse_mode=html");
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
+        buyerAdminMainMenu($chat_id);
+    }
+}
+////////////////////PICKING REPORT/////////////////////////////
+function pickingReportAll($chat_id)
+{
+    global $botAPI;
+    global $con;
+    $update = json_decode(file_get_contents('php://input', true));
+    $tguser = $update->message->from->username;
+    $checkUserExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='super admin'";
+    $checkUserExistanceQuery = mysqli_query($con, $checkUserExistance);
+    $AdminRow = mysqli_num_rows($checkUserExistanceQuery);
+    ////////////////////////////////
+    $checkFarmadminExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='admin'";
+    $checkFarmadminExistanceQuery = mysqli_query($con, $checkFarmadminExistance);
+    $FarmAdminRow = mysqli_num_rows($checkFarmadminExistanceQuery);
+    ////////////////////////////////
+
+
+    date_default_timezone_set("Africa/Addis_Ababa");
+    $today = date('y-m-d');
+    $listDailyPicking = "SELECT * FROM collecting where collecting_date= '$today'";
+    $listDailyPickingnQuery = mysqli_query($con, $listDailyPicking);
+    $PickingRow = mysqli_num_rows($listDailyPickingnQuery);
+    if ($$PickingRow > 0) {
+        while ($ro = mysqli_fetch_array($listDailyPickingnQuery)) {
+            $buyer_telegram_id = $ro['buyer_telegram_id'];
+            $picker_name = $ro['seller_name'];
+            $farm_name = $ro['farm_name'];
+            $quantity = $ro['quantity'];
+            $rate = $ro['rate'];
+            $total = $ro['total'];
+            $picture = $ro['picture'];
+            $transaction_date = $ro['collecting_date'];
+            $location = $ro['location'];
+            $latitude = $ro['latitude'];
+            $longtiude = $ro['longitude'];
+            $hel = "<b>PICKING REPORT</b>%0A";
+            $marksHTML = "";
+            $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
+            //$marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
+            $marksHTML .= "<b>Farm:-</b> " . strtolower($farm_name) . "%0A";
+            $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
+            $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
+            $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
+            $hel .= $marksHTML;
+            $viewPicker = "P_";
+            $viewPicker .=  $picker_name;
+            // $loc = $latitude . "," . $longtiude;
+            // $viewLocation = "L ";
+            // $viewLocation .= $loc;
+            $keyboard = json_encode(["inline_keyboard" => [[
+                ["text" => " 👓 View Picker", "callback_data" => $viewPicker],
+            ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
+            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id. "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
+            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
+            file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
+        }
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
+    } else {
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed today &parse_mode=html");
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
+    }
+}
+function previewPicker($half, $chat_id)
+{
+
+
+    global $botAPI;
+    global $con;
+
+    $listpicker = "SELECT * FROM pickers WHERE fullname = '$half'";
+    $listpickerQuery = mysqli_query($con, $listpicker);
+    $listpickerQueryrow = mysqli_num_rows($listpickerQuery);
+    $marksHTML = "";
+
+    if ($listpickerQueryrow > 0) {
+        while ($ro = mysqli_fetch_array($listpickerQuery)) {
+            $adminTelegram_id = $ro['admin_telegram_id'];
+            $firstname = $ro['firstname'];
+            $lastname = $ro['lastname'];
+            $picture = $ro['picture'];
+            $woreda = $ro['woreda'];
+            $neighborhood = $ro['neighborhood'];
+            $date_registered = $ro['date_registered'];
+        }
+        $buyerRegitersThepicker = "SELECT * FROM company_users WHERE telegram_id = '$adminTelegram_id'";
+        $buyerRegitersThepickerQuery = mysqli_query($con, $buyerRegitersThepicker);
+        while ($row_admin = mysqli_fetch_array($buyerRegitersThepickerQuery)) {
+            $adminFirstname = $row_admin['firstname'];
+            $adminLastname = $row_admin['lastname'];
+        }
+
+        $hel = strtolower($firstname) . " " . strtolower($lastname) . "%0A";
+        $marksHTML .= "Woreda:- " .  strtolower($woreda) . "%0A";
+        $marksHTML .= "Neighborhood:- " . strtolower($neighborhood) . "%0A";
+        $marksHTML .= "Registerd by:-" . strtolower($adminFirstname . " " . $adminLastname) . "%0A";
+        $marksHTML .= "Date of registration:-" . strtolower($date_registered) . "%0A";
+        $hel .= $marksHTML;
+        file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&parse_mode=html");
+    }
+}
+function pickingReportByContract($chat_id, $msg)
+{
+    global $botAPI;
+    global $con;
+    $update = json_decode(file_get_contents('php://input', true));
+    $tguser = $update->message->from->username;
+    $checkUserExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='super admin'";
+    $checkUserExistanceQuery = mysqli_query($con, $checkUserExistance);
+    $AdminRow = mysqli_num_rows($checkUserExistanceQuery);
+    ////////////////////////////////
+    $checkFarmadminExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='admin'";
+    $checkFarmadminExistanceQuery = mysqli_query($con, $checkFarmadminExistance);
+    $FarmAdminRow = mysqli_num_rows($checkFarmadminExistanceQuery);
+    ////////////////////////////////
+    date_default_timezone_set("Africa/Addis_Ababa");
+    $today = date('y-m-d');
+    $listDailyTransaction = "SELECT * FROM collecting where collecting_date= '$today' && farm_name='$msg'";
+    $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
+    $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
+    if ($TransactionRow > 0) {
+        while ($ro = mysqli_fetch_array($listDailyTransactionQuery)) {
+            $buyer_telegram_id = $ro['buyer_telegram_id'];
+            $picker_name = $ro['picker_name'];
+            // $location = $ro['location'];
+            // $longtiude = $ro['longitude'];
+            // $latitude = $ro['latitude'];
+            // $coffee_grade = $ro['coffee_grade'];
+            $quantity = $ro['quantity'];
+            $rate = $ro['rate'];
+            $total = $ro['total'];
+            $picture = $ro['picture'];
+            $collecting_date = $ro['collecting_date'];
+            $hel = "<b>PICKING REPORT</b>%0A";
+            $marksHTML = "";
+            $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
+            // $marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
+            //$marksHTML .= "<b>Coffee_grade:-</b> " . strtolower($coffee_grade) . "%0A";
+            $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
+            $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
+            $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
+            $hel .= $marksHTML;
+            $viewPicker = "P_";
+            $viewPicker .=  $picker_name;
+            // $loc = $latitude . "," . $longtiude;
+            // $viewLocation = "L ";
+            // $viewLocation .= $loc;
+            $keyboard = json_encode(["inline_keyboard" => [[
+                ["text" => " 👓 View Seller", "callback_data" => $viewPicker],
+            ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
+            file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
+        }
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
+    } else {
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=There are no transactions performed with this farm &parse_mode=html");
+        if ($AdminRow > 0) {
+            superAdminMenu($chat_id);
+        } else if ($FarmAdminRow > 0) {
+            buyerAdminMainMenu($chat_id);
+        }
         buyerAdminMainMenu($chat_id);
     }
 }

@@ -51,3 +51,20 @@ function setFarmValue($id, $key, $temp)
     $now = "UPDATE coffee_contract SET $key ='$temp' WHERE telegram_id='$id' && status='FALSE'";
     mysqli_query($con, $now);
 }
+function setPickerValue($id,$key,$temp){
+    global $con;
+    $now="UPDATE pickers_temp SET $key='$temp' WHERE admin_telegram_id='$id'";
+    mysqli_query($con,$now);
+}
+function setPickingValue($id, $key, $temp, $priceId)
+{
+    global $con;
+    $now = "UPDATE picking_ratetemp SET $key ='$temp' WHERE telegram_id='$id' && id='$priceId' ";
+    mysqli_query($con, $now);
+}
+function setCollectingValue($id, $key, $temp)
+{
+    global $con;
+    $now = "UPDATE transaction_temp SET $key ='$temp' WHERE buyer_telegram_id='$id'";
+    mysqli_query($con, $now);
+}
