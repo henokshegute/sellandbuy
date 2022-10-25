@@ -187,7 +187,6 @@ function reportByContract($chat_id, $msg)
         } else if ($FarmAdminRow > 0) {
             buyerAdminMainMenu($chat_id);
         }
-        buyerAdminMainMenu($chat_id);
     }
 }
 ////////////////////PICKING REPORT/////////////////////////////
@@ -212,19 +211,17 @@ function pickingReportAll($chat_id)
     $listDailyPicking = "SELECT * FROM collecting where collecting_date= '$today'";
     $listDailyPickingnQuery = mysqli_query($con, $listDailyPicking);
     $PickingRow = mysqli_num_rows($listDailyPickingnQuery);
-    if ($$PickingRow > 0) {
+    if ($PickingRow > 0) {
         while ($ro = mysqli_fetch_array($listDailyPickingnQuery)) {
             $buyer_telegram_id = $ro['buyer_telegram_id'];
-            $picker_name = $ro['seller_name'];
+            $picker_name = $ro['picker_name'];
             $farm_name = $ro['farm_name'];
             $quantity = $ro['quantity'];
             $rate = $ro['rate'];
             $total = $ro['total'];
             $picture = $ro['picture'];
             $transaction_date = $ro['collecting_date'];
-            $location = $ro['location'];
-            $latitude = $ro['latitude'];
-            $longtiude = $ro['longitude'];
+
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
@@ -321,15 +318,15 @@ function pickingReportByContract($chat_id, $msg)
         while ($ro = mysqli_fetch_array($listDailyTransactionQuery)) {
             $buyer_telegram_id = $ro['buyer_telegram_id'];
             $picker_name = $ro['picker_name'];
-            // $location = $ro['location'];
-            // $longtiude = $ro['longitude'];
-            // $latitude = $ro['latitude'];
-            // $coffee_grade = $ro['coffee_grade'];
             $quantity = $ro['quantity'];
             $rate = $ro['rate'];
             $total = $ro['total'];
             $picture = $ro['picture'];
             $collecting_date = $ro['collecting_date'];
+            // $location = $ro['location'];
+            // $longtiude = $ro['longitude'];
+            // $latitude = $ro['latitude'];
+            // $coffee_grade = $ro['coffee_grade'];
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
@@ -345,7 +342,7 @@ function pickingReportByContract($chat_id, $msg)
             // $viewLocation = "L ";
             // $viewLocation .= $loc;
             $keyboard = json_encode(["inline_keyboard" => [[
-                ["text" => " 👓 View Seller", "callback_data" => $viewPicker],
+                ["text" => " 👓 View Picker", "callback_data" => $viewPicker],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
             file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
         }
@@ -361,6 +358,5 @@ function pickingReportByContract($chat_id, $msg)
         } else if ($FarmAdminRow > 0) {
             buyerAdminMainMenu($chat_id);
         }
-        buyerAdminMainMenu($chat_id);
     }
 }

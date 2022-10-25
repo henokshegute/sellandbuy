@@ -10,7 +10,6 @@ function acceptCompany($id, $chat_id, $message_id)
     $row_num = mysqli_num_rows($query);
     if ($row_num > 0) {
         while ($ro = mysqli_fetch_array($query)) {
-
             $telgram_id = $ro['telegram_id'];
             $company_name = $ro['company_name'];
             $phone_number = $ro['phone_number'];

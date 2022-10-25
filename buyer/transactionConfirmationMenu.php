@@ -52,7 +52,7 @@ function confirmCollecting($chat_id)
         $farm_name = $ro['farm_name'];
         $picker_name = $ro['picker_name'];
         $quantity = $ro['quantity'];
-        $price = $ro['price'];
+        $price = $ro['rate'];
         $total = $ro['total'];
         $picture = $ro['picture'];
         // $zone = $ro['zone'];
