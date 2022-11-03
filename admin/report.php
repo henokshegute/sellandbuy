@@ -52,8 +52,6 @@ function reportAll($chat_id)
                 ["text" => " 👓 View Seller", "callback_data" => $viewSeller],
                 ["text" => " 📍 View Location", "callback_data" => $viewLocation],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
-            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id. "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
-            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
             file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
         }
         if ($AdminRow > 0) {
@@ -137,7 +135,10 @@ function reportByContract($chat_id, $msg)
     ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
-    $listDailyTransaction = "SELECT * FROM transaction where contract_name='$msg'";
+    $date=date_create("$today");
+    $dateInterval=date_sub($date,date_interval_create_from_date_string("2 days"));
+    $reportInterval=date_format($dateInterval,"y-m-d");
+    $listDailyTransaction = "SELECT * FROM transaction where  transaction_date >= '$reportInterval' && contract_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
     if ($TransactionRow > 0) {
