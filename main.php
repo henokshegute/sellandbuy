@@ -105,7 +105,6 @@ if (isset($update->message->text)) {
     $checkEditRateExistanceQuery = mysqli_query($con, $checkEditRateExistance);
     $EditRateRow = mysqli_num_rows($checkEditRateExistanceQuery);
     ///////////////////////////////////////////////////////////////////////
-
     //////////////////////////////////////////////////////////////////////
     $checkReport = "SELECT * FROM report WHERE telegram_id='$chat_id'";
     $checkReportQuery = mysqli_query($con, $checkReport);
@@ -128,6 +127,20 @@ if (isset($update->message->text)) {
     $pickerRow = mysqli_num_rows($checkPickerTempQuery);
     /////////////////////////////////////////////////////////////////////
     if ($msg == "/start") {
+        $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
+        mysqli_query($con, $delettransactionfromtemp);
+        $deletuserregistration = "DELETE FROM company_users_temp WHERE company_telegram_id='$chat_id'";
+        mysqli_query($con, $deletuserregistration);
+        $deletsellerregistration = "DELETE FROM sellers_temp WHERE admin_telegram_id='$chat_id'";
+        mysqli_query($con,  $deletsellerregistration);
+        $deletecontract = "DELETE FROM coffee_contract WHERE telegram_id='$chat_id' AND status='FALSE'";
+        mysqli_query($con, $deletecontract);
+        $deleteditprice = $con->query("DELETE FROM edit_price where  telegram_id='$chat_id' ");
+        $deleteditrateRequest = $con->query("DELETE FROM edit_rate where  telegram_id='$chat_id' ");
+        $deletpickingrateRequest = $con->query("DELETE FROM picking_ratetemp where  telegram_id='$chat_id' ");
+        $deletpickersRequest = $con->query("DELETE FROM pickers_temp where  admin_telegram_id='$chat_id' ");
+        $deletcollectingRequest = $con->query("DELETE FROM collecting_temp where  buyer_telegram_id='$chat_id' ");
+        $deletcompanyRequest = $con->query("DELETE FROM company_temp where telegram_id='$chat_id' ");
         if ($ownerRow > 0) {
             ownerMenu($chat_id);
         } else if ($companyRow > 0) {
@@ -242,6 +255,11 @@ if (isset($update->message->text)) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please provide a valid phone number. The number must start with (9) and follow with 8 digits after.");
             }
         } else if ($msg != "/cancel" && ($phonenumber != NULL && $telegram_username == NULL)) {
+            $username = "SELECT * FROM company_users";
+            $usernameQuery = mysqli_query($con, $username);
+            while ($us = mysqli_fetch_array($usernameQuery)) {
+                $userTelegram = $us['telegram_username'];
+            }
             if ($msg == $userTelegram) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=This user has already been registered as an admin. If you would like to add another admin please enter another telegram username. If you would like to cancel registration please select /cancel.");
             } else {
@@ -277,11 +295,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the scale man's phone number. Begin the phone number with the number (9) and follow.");
         }
     } else if ($buyerTempRow > 0) {
-        $username = "SELECT * FROM company_users";
-        $usernameQuery = mysqli_query($con, $username);
-        while ($us = mysqli_fetch_array($usernameQuery)) {
-            $userTelegram = $us['telegram_username'];
-        }
+
         while ($ro = mysqli_fetch_array($checkBuyerTempExistanceQuery)) {
             $companyTelegram_id = $ro['company_telegram_id'];
             $phonenumber = $ro['phone_number'];
@@ -303,6 +317,11 @@ if (isset($update->message->text)) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please provide a valid phone number. The number must start with (9) and follow with 8 digits after.");
             }
         } else if (($phonenumber != NULL && $telegram_username == NULL) && $msg != "/cancel") {
+            $username = "SELECT * FROM company_users";
+            $usernameQuery = mysqli_query($con, $username);
+            while ($us = mysqli_fetch_array($usernameQuery)) {
+                $userTelegram = $us['telegram_username'];
+            }
             if ($msg == $userTelegram) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=This user has already been registered as a scale man. If you would like to add another scale man please enter another telegram username. If you would like to cancel registration please select /cancel.");
             } else {
@@ -349,11 +368,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the admin's phone number. Begin the phone number with the number (9) and follow.");
         }
     } else if ($FarmadminTempRow > 0) {
-        $username = "SELECT * FROM company_users";
-        $usernameQuery = mysqli_query($con, $username);
-        while ($us = mysqli_fetch_array($usernameQuery)) {
-            $userTelegram = $us['telegram_username'];
-        }
+
         while ($ro = mysqli_fetch_array($checkFarmAdminTempExistanceQuery)) {
             $companyTelegram_id = $ro['company_telegram_id'];
             $phonenumber = $ro['phone_number'];
@@ -375,6 +390,11 @@ if (isset($update->message->text)) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please provide a valid phone number. The number must start with (9) and follow with 8 digits after.");
             }
         } else if (($phonenumber != NULL && $telegram_username == NULL) && $msg != "/cancel") {
+            $username = "SELECT * FROM company_users";
+            $usernameQuery = mysqli_query($con, $username);
+            while ($us = mysqli_fetch_array($usernameQuery)) {
+                $userTelegram = $us['telegram_username'];
+            }
             if ($msg == $userTelegram) {
                 file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=This user has already been registered as a admin. If you would like to add another admin man please enter another telegram username. If you would like to cancel registration please select /cancel.");
             } else {
@@ -413,11 +433,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter his/her first name.");
         }
     } else if ($sellerRow > 0) {
-        $username = "SELECT * FROM sellers";
-        $usernameQuery = mysqli_query($con, $username);
-        while ($us = mysqli_fetch_array($usernameQuery)) {
-            $sellersPhone = $us['phone_number'];
-        }
+
         while ($ro = mysqli_fetch_array($checkSellerTempExistanceQuery)) {
             $adminTelegram_id = $ro['admin_telegram_id'];
             $firstname = $ro['firstname'];
@@ -452,6 +468,11 @@ if (isset($update->message->text)) {
         } else if (($neighborhood != NULL && $phone_number == NULL) && $msg != "/cancel") {
             $str = $msg;
             $pattern = "/((^9\d{2})-?\d{6})$/";
+            $phonenum = "SELECT * FROM sellers";
+            $phonenumQuery = mysqli_query($con, $phonenum);
+            while ($us = mysqli_fetch_array($phonenumQuery)) {
+                $sellersPhone = $us['phone_number'];
+            }
             if (preg_match($pattern, $str)) {
                 if ("+251" . $msg == $sellersPhone) {
                     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=This seller has already been registered. If you would like to add another seller please enter another phone number. If you would like to cancel registration please select /cancel.");
@@ -564,10 +585,8 @@ if (isset($update->message->text)) {
             $zone = $ro['zone'];
             $neighborhood = $ro['neighborhood'];
             $contract_name = $ro['contract_name'];
-            // $process = $ro['process'];
             $seller_name = $ro['seller_name'];
             $picture = $ro['picture'];
-            // $coffee_grade = $ro['coffee_grade'];
             $quantity = $ro['quantity'];
             $price = $ro['price'];
             $location = $ro['location'];
@@ -885,8 +904,12 @@ if (isset($update->message->text)) {
             setPickingValue($chat_id, "farm_name", "$msg", $priceLastId);
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the price to be requested");
         } else if (($farm_name != NULL &&  $price == NULL) && $msg != "/cancel") {
-            setPickingValue($chat_id, "price", "$msg", $priceLastId);
-            pickingRateConfirmationReply($chat_id);
+            if (is_numeric($msg) == TRUE) {
+                setPickingValue($chat_id, "price", "$msg", $priceLastId);
+                pickingRateConfirmationReply($chat_id);
+            } else {
+                file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter numeric value only");
+            }
         }
         if ($msg == "Confirm Picking Rate" && $status == "FALSE") {
             setPickingValue($chat_id, "status", "TRUE", $priceLastId);
@@ -920,8 +943,12 @@ if (isset($update->message->text)) {
             $priceLastId = $ro['id'];
         }
         if (($farm_name != NULL && $price == NULL) && $status == "EDIT") {
-            setEditRate($chat_id, "price", "$msg", $priceLastId);
-            rateEditMenu($chat_id);
+            if (is_numeric($msg) == TRUE) {
+                setEditRate($chat_id, "price", "$msg", $priceLastId);
+                rateEditMenu($chat_id);
+            } else {
+                file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter numeric value only");
+            }
         }
         if ($msg == "Confirm Rate" && $status == "EDIT") {
             $updatePriceTable = "INSERT INTO picking_rate (telegram_id,farm_name,price,date_registered) VALUES('$telegram_id','$farm_name','$price','$today')";
@@ -957,16 +984,14 @@ if (isset($update->message->text)) {
         mysqli_query($con, $deletuserregistration);
         $deletsellerregistration = "DELETE FROM sellers_temp WHERE admin_telegram_id='$chat_id'";
         mysqli_query($con,  $deletsellerregistration);
-        $deletpricerequest = "DELETE FROM price_temp WHERE telegram_id='$chat_id'";
-        mysqli_query($con,  $deletpricerequest);
         $deletecontract = "DELETE FROM coffee_contract WHERE telegram_id='$chat_id' AND status='FALSE'";
         mysqli_query($con, $deletecontract);
         $deleteditprice = $con->query("DELETE FROM edit_price where  telegram_id='$chat_id' ");
         $deleteditrateRequest = $con->query("DELETE FROM edit_rate where  telegram_id='$chat_id' ");
         $deletpickingrateRequest = $con->query("DELETE FROM picking_ratetemp where  telegram_id='$chat_id' ");
         $deletpickersRequest = $con->query("DELETE FROM pickers_temp where  admin_telegram_id='$chat_id' ");
-        $deletcollectingRequest = $con->query("DELETE FROM collecting_temp where  admin_telegram_id='$chat_id' ");
-        $deletcompanyRequest = $con->query("DELETE FROM company_temp where  admin_telegram_id='$chat_id' ");
+        $deletcollectingRequest = $con->query("DELETE FROM collecting_temp where  buyer_telegram_id='$chat_id' ");
+        $deletcompanyRequest = $con->query("DELETE FROM company_temp where telegram_id='$chat_id' ");
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Canceled!");
         if ($AdminRow > 0) {
             superAdminMenu($chat_id);
@@ -1026,35 +1051,33 @@ if (isset($update->message->text)) {
 } else if (isset($update->callback_query->data)) {
     $chat_id = $update->callback_query->from->id;
     $message_id =  $update->callback_query->message->message_id;
-    list($first, $id, $priceId) = explode(" ", $update->callback_query->data);
+
+    list($first, $second, $third) = explode(" ", $update->callback_query->data);
     if ($first == "e") {
-        acceptCompany($id, $chat_id, $message_id);
+        acceptCompany($second, $chat_id, $message_id);
     } else if ($first == "d") {
-        delete($id, $chat_id, $message_id);
+        delete($second, $chat_id, $message_id);
     } else if ($first == "a") {
-        accept($id, $chat_id, $message_id, $priceId);
+        accept($second, $chat_id, $message_id, $third);
     } else if ($first == "n") {
-        declinePrice($id, $chat_id, $message_id, $priceId);
+        declinePrice($second, $chat_id, $message_id, $third);
     } else if ($first == "c") {
-        changeprice($id, $chat_id, $message_id, $priceId);
+        changeprice($second, $chat_id, $message_id, $third);
     } else if ($first == "L") {
-        accessLocation($id, $chat_id);
+        accessLocation($second, $third, $chat_id);
     } else if ($first == "acceptRate") {
-        acceptRate($id, $chat_id, $message_id, $priceId);
+        acceptRate($second, $chat_id, $message_id, $third);
     } else if ($first == "declineRate") {
-        declineRate($id, $chat_id, $message_id, $priceId);
+        declineRate($second, $chat_id, $message_id, $third);
     } else if ($first == "changeRate") {
-        changerate($id, $chat_id, $message_id, $priceId);
-    }
-    list($full, $half) = explode("_", $update->callback_query->data);
-    if ($full == "v") {
-        previewSeller($half, $chat_id);
-    } else if ($full == "P") {
-        previewPicker($half, $chat_id);
+        changerate($second, $chat_id, $message_id, $third);
+    } else if ($first == "v") {
+        previewSeller($second, $third, $chat_id);
+    } else if ($first == "P") {
+        previewPicker($second, $third, $chat_id);
     }
 } else if (isset($update->inline_query)) {
     $chatId = $update->inline_query->from->id;
-    // $chat_id = $update->message->chat->id;
     $checkTransactionExistance = "SELECT * FROM transaction_temp WHERE buyer_telegram_id='$chatId' AND edit='FALSE'";
     $checkTransactionExistanceQuery = mysqli_query($con, $checkTransactionExistance);
     $transactionRow = mysqli_num_rows($checkTransactionExistanceQuery);
@@ -1115,15 +1138,17 @@ if (isset($update->message->text)) {
     ///////////////////////
     $checkSellerTempExistance = "SELECT * FROM sellers_temp WHERE admin_telegram_id ='$chat_id'";
     $checkSellerTempExistanceQuery = mysqli_query($con, $checkSellerTempExistance);
-    while ($registration = mysqli_fetch_array($checkSellerTempExistanceQuery)) {
-        $adminId = $registration['admin_telegram_id'];
-    }
+    $SellerRowtemp = mysqli_num_rows($checkSellerTempExistanceQuery);
+    // while ($registration = mysqli_fetch_array($checkSellerTempExistanceQuery)) {
+    //     $adminId = $registration['admin_telegram_id'];
+    // }
     ////////////////////////////////////
     $checkSellerPicExistance = "SELECT * FROM sellers WHERE edit='TRUE' AND editor_id='$chat_id'";
     $checkSellerPicExistanceQuery = mysqli_query($con, $checkSellerPicExistance);
-    while ($pictureRow = mysqli_fetch_array($checkSellerPicExistanceQuery)) {
-        $editorId = $pictureRow['editor_id'];
-    }
+    $SellerRow = mysqli_num_rows($checkSellerPicExistanceQuery);
+    // while ($pictureRow = mysqli_fetch_array($checkSellerPicExistanceQuery)) {
+    //     $editorId = $pictureRow['editor_id'];
+    // }
     $checkpickerPicExistance = "SELECT * FROM pickers_temp WHERE admin_telegram_id='$chat_id'";
     $checkpickerPicExistanceQuery = mysqli_query($con, $checkpickerPicExistance);
     $pickerRowtemp = mysqli_num_rows($checkpickerPicExistanceQuery);
@@ -1132,13 +1157,13 @@ if (isset($update->message->text)) {
     $checkCollectingExistanceQuery = mysqli_query($con, $checkCollectingExistance);
     $collectingRow = mysqli_num_rows($checkCollectingExistanceQuery);
     ///////////////////////
-    if ($adminId != NULL) {
+    if ($SellerRowtemp > 0) {
         setSellersValue($chat_id, "picture", $pic);
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Woreda.");
     } else if ($buyerId != NULL &&  $edit == 'FALSE') {
         setTransactionValue($chat_id, "picture", $pic);
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the coffee quantity in Kg.");
-    } else if ($editorId != NULL && $buyerId != NULL) {
+    } else if ($SellerRow > 0 && $buyerId != NULL) {
         editSellersValue($chat_id, "picture", $pic);
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Seller picture updated.");
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please add a photo of the coffee");

@@ -25,9 +25,9 @@ function listrequesteduser($chat_id)
             $hel = "<b>Aprove:</b>%0A";
             $hel .= $marksHTML;
             $acceptCompany = "e ";
-            $acceptCompany .=  $telegram_id;
+            $acceptCompany .=  $telegram_id . " " . "default";
             $delete = "d ";
-            $delete .= $telegram_id;
+            $delete .= $telegram_id . " " . "default";
             $keyboard = json_encode(["inline_keyboard" => [[
                 ["text" => " ✔️ User", "callback_data" => $acceptCompany],
                 ["text" => " ❌ Delete", "callback_data" => $delete],

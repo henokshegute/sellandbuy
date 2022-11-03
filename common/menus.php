@@ -17,4 +17,3 @@ function disableForwarding($chat_id)
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=you can't forward location!please send the location directly &reply_markup=" . $reply);
 }
-//$message = "please press the" . " " . "/start" . " " . "command from the left hand-side menu with three bars.";

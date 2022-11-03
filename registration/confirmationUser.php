@@ -52,9 +52,9 @@ function savebuyerdata($chat_id)
         $woreda = $ro['woreda'];
         $role = $ro['role'];
     }
-    $selectFarmAdminscompany = "SELECT * FROM company_users where company_telegram_id='$chat_id'";
-    $selectownerscompanyQuery = mysqli_query($con, $selectFarmAdminscompany);
-    while ($co = mysqli_fetch_array($selectownerscompanyQuery)) {
+    $selectFarmAdminscompany = "SELECT * FROM company_users where telegram_id='$chat_id'";
+    $selectFarmAdminscompanyQuery = mysqli_query($con, $selectFarmAdminscompany);
+    while ($co = mysqli_fetch_array($selectFarmAdminscompanyQuery)) {
         $companyName = $co['company_name'];
     }
 
@@ -86,9 +86,9 @@ function saveFarmAdmindata($chat_id)
         $role = $ro['role'];
         $assigned_farm = $ro['assigned_farm'];
     }
-    $selectAdminacompany = "SELECT * FROM company_users where telegram_id='$chat_id'";
-    $selectownerscompanyQuery = mysqli_query($con, $selectAdminacompany);
-    while ($co = mysqli_fetch_array($selectownerscompanyQuery)) {
+    $selectAdminscompany = "SELECT * FROM company_users where telegram_id='$chat_id'";
+    $selectAdminscompanyQuery = mysqli_query($con, $selectAdminscompany);
+    while ($co = mysqli_fetch_array($selectAdminscompanyQuery)) {
         $companyName = $co['company_name'];
     }
 

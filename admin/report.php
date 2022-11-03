@@ -43,9 +43,9 @@ function reportAll($chat_id)
             $marksHTML .= "<b>1kg price :-</b> " . strtolower($price) . "%0A";
             $marksHTML .= "<b>Total price:- </b>" . strtolower($total) . "%0A";
             $hel .= $marksHTML;
-            $viewSeller = "v_";
+            $viewSeller = "v ";
             $viewSeller .=  $seller_name;
-            $loc = $latitude . "," . $longtiude;
+            $loc = $latitude . " " . $longtiude;
             $viewLocation = "L ";
             $viewLocation .= $loc;
             $keyboard = json_encode(["inline_keyboard" => [[
@@ -70,14 +70,14 @@ function reportAll($chat_id)
         }
     }
 }
-function previewSeller($half, $chat_id)
+function previewSeller($first, $second, $chat_id)
 {
 
 
     global $botAPI;
     global $con;
-
-    $listSeller = "SELECT * FROM sellers WHERE fullname = '$half'";
+    $fullname = "$first" . " " . "$second";
+    $listSeller = "SELECT * FROM sellers WHERE fullname = '$fullname' ";
     $listSellerQuery = mysqli_query($con, $listSeller);
     $listSellerQueryrow = mysqli_num_rows($listSellerQuery);
     $marksHTML = "";
@@ -114,12 +114,10 @@ function previewSeller($half, $chat_id)
         file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&parse_mode=html");
     }
 }
-function accessLocation($half, $chat_id)
+function accessLocation($lat, $long, $chat_id)
 {
-    global $botAPI;
-    list($lat, $long) = explode(",", $half);
-    // $lat=8.989571;
-    // $long=38.786356;
+    global $botAPI; // list($lat, $long) = explode(",", $half);
+    print_r($lat, $long);
     file_get_contents($botAPI . "/sendlocation?chat_id=" . $chat_id . "&latitude=" . $lat . " &longitude=" . $long);
 }
 
@@ -139,7 +137,7 @@ function reportByContract($chat_id, $msg)
     ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
-    $listDailyTransaction = "SELECT * FROM transaction where transaction_date= '$today' && contract_name='$msg'";
+    $listDailyTransaction = "SELECT * FROM transaction where contract_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
     if ($TransactionRow > 0) {
@@ -159,14 +157,13 @@ function reportByContract($chat_id, $msg)
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
             $marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
-            //$marksHTML .= "<b>Coffee_grade:-</b> " . strtolower($coffee_grade) . "%0A";
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg price :-</b> " . strtolower($price) . "%0A";
             $marksHTML .= "<b>Total price:- </b>" . strtolower($total) . "%0A";
             $hel .= $marksHTML;
             $viewSeller = "v_";
             $viewSeller .=  $seller_name;
-            $loc = $latitude . "," . $longtiude;
+            $loc = $latitude . " " . $longtiude;
             $viewLocation = "L ";
             $viewLocation .= $loc;
             $keyboard = json_encode(["inline_keyboard" => [[
@@ -225,22 +222,17 @@ function pickingReportAll($chat_id)
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
-            //$marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
             $marksHTML .= "<b>Farm:-</b> " . strtolower($farm_name) . "%0A";
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
             $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
             $hel .= $marksHTML;
-            $viewPicker = "P_";
+            $viewPicker = "P ";
             $viewPicker .=  $picker_name;
-            // $loc = $latitude . "," . $longtiude;
-            // $viewLocation = "L ";
-            // $viewLocation .= $loc;
             $keyboard = json_encode(["inline_keyboard" => [[
                 ["text" => " 👓 View Picker", "callback_data" => $viewPicker],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
-            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id. "&text="  . $marksHTML . "&parse_mode=html&reply_markup={$keyboard}");
-            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&parse_mode=html&reply_markup={$keyboard}");
+
             file_get_contents($botAPI . "/sendPhoto?chat_id=" . $chat_id . "&photo=" . $picture . "&caption=" . $hel . "&reply_markup={$keyboard} &parse_mode=html");
         }
         if ($AdminRow > 0) {
@@ -257,14 +249,14 @@ function pickingReportAll($chat_id)
         }
     }
 }
-function previewPicker($half, $chat_id)
+function previewPicker($first, $second, $chat_id)
 {
 
 
     global $botAPI;
     global $con;
-
-    $listpicker = "SELECT * FROM pickers WHERE fullname = '$half'";
+    $fullname = "$first" . " " . "$second";
+    $listpicker = "SELECT * FROM pickers WHERE fullname = '$fullname'";
     $listpickerQuery = mysqli_query($con, $listpicker);
     $listpickerQueryrow = mysqli_num_rows($listpickerQuery);
     $marksHTML = "";
@@ -311,7 +303,7 @@ function pickingReportByContract($chat_id, $msg)
     ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
-    $listDailyTransaction = "SELECT * FROM collecting where collecting_date= '$today' && farm_name='$msg'";
+    $listDailyTransaction = "SELECT * FROM collecting where farm_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
     if ($TransactionRow > 0) {
@@ -323,24 +315,16 @@ function pickingReportByContract($chat_id, $msg)
             $total = $ro['total'];
             $picture = $ro['picture'];
             $collecting_date = $ro['collecting_date'];
-            // $location = $ro['location'];
-            // $longtiude = $ro['longitude'];
-            // $latitude = $ro['latitude'];
-            // $coffee_grade = $ro['coffee_grade'];
+
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
-            // $marksHTML .= "<b>Location :- </b>" . strtolower($location) . "%0A";
-            //$marksHTML .= "<b>Coffee_grade:-</b> " . strtolower($coffee_grade) . "%0A";
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
             $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
             $hel .= $marksHTML;
-            $viewPicker = "P_";
+            $viewPicker = "P ";
             $viewPicker .=  $picker_name;
-            // $loc = $latitude . "," . $longtiude;
-            // $viewLocation = "L ";
-            // $viewLocation .= $loc;
             $keyboard = json_encode(["inline_keyboard" => [[
                 ["text" => " 👓 View Picker", "callback_data" => $viewPicker],
             ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);

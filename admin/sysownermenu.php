@@ -20,7 +20,7 @@ function superAdminMenu($chat_id)
 {
     global $botAPI;
     $keyboard = array(array("Register Scale Man", "Add New Seller"), array("Report", "Request Price"), array("Add New Farm", "Picking Rate"), array("Add Farm Admin"));
-    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
+    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "remove_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text= Welcome &reply_markup=" . $reply);
 }
@@ -60,7 +60,7 @@ function gender($chat_id)
 {
     global $botAPI;
     $keyboard = array(array("MALE"), array("FEMALE"));
-    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
+    $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "remove_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Gender. &reply_markup=" . $reply);
 }

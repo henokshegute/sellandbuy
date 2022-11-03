@@ -15,7 +15,7 @@ function coffeeContractMenu($chat_id)
             array_push($contractMain, [end($contract_name_array)]);
         }
         $keyboard = $contractMain;
-        $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
+        $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "remove_keyboard" => true, "one_time_keyboard" => true);
         $reply = json_encode($resp);
         $message = "Please select farm from the menu";
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $message . "&reply_markup=" . $reply);
