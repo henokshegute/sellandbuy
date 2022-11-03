@@ -135,9 +135,9 @@ function reportByContract($chat_id, $msg)
     ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
-    $date=date_create("$today");
-    $dateInterval=date_sub($date,date_interval_create_from_date_string("2 days"));
-    $reportInterval=date_format($dateInterval,"y-m-d");
+    $date = date_create("$today");
+    $dateInterval = date_sub($date, date_interval_create_from_date_string("2 days"));
+    $reportInterval = date_format($dateInterval, "y-m-d");
     $listDailyTransaction = "SELECT * FROM transaction where  transaction_date >= '$reportInterval' && contract_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
@@ -304,7 +304,10 @@ function pickingReportByContract($chat_id, $msg)
     ////////////////////////////////
     date_default_timezone_set("Africa/Addis_Ababa");
     $today = date('y-m-d');
-    $listDailyTransaction = "SELECT * FROM collecting where farm_name='$msg'";
+    $date = date_create("$today");
+    $dateInterval = date_sub($date, date_interval_create_from_date_string("2 days"));
+    $reportInterval = date_format($dateInterval, "y-m-d");
+    $listDailyTransaction = "SELECT * FROM collecting where collecting_date='$reportInterval' && farm_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
     if ($TransactionRow > 0) {
