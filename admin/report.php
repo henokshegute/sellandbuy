@@ -34,6 +34,8 @@ function reportAll($chat_id)
             $total = $ro['total'];
             $picture = $ro['picture'];
             $transaction_date = $ro['transaction_date'];
+            $tStamp = $ro['time'];
+            list($date, $time) = explode(" ", $tStamp);
             $hel = "<b>TRANSACTION REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
@@ -42,6 +44,8 @@ function reportAll($chat_id)
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg price :-</b> " . strtolower($price) . "%0A";
             $marksHTML .= "<b>Total price:- </b>" . strtolower($total) . "%0A";
+            $marksHTML .= "<b>Transaction Date:- </b>" . strtolower($transaction_date) . "%0A";
+            $marksHTML .= "<b>Time:- </b>" . strtolower($time) . "%0A";
             $hel .= $marksHTML;
             $viewSeller = "v ";
             $viewSeller .=  $seller_name;
@@ -154,6 +158,8 @@ function reportByContract($chat_id, $msg)
             $total = $ro['total'];
             $picture = $ro['picture'];
             $transaction_date = $ro['transaction_date'];
+            $tStamp = $ro['time'];
+            list($date, $time) = explode(" ", $tStamp);
             $hel = "<b>TRANSACTION REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
@@ -161,6 +167,8 @@ function reportByContract($chat_id, $msg)
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg price :-</b> " . strtolower($price) . "%0A";
             $marksHTML .= "<b>Total price:- </b>" . strtolower($total) . "%0A";
+            $marksHTML .= "<b>Transaction Date:- </b>" . strtolower($transaction_date) . "%0A";
+            $marksHTML .= "<b>Time:- </b>" . strtolower($time) . "%0A";
             $hel .= $marksHTML;
             $viewSeller = "v_";
             $viewSeller .=  $seller_name;

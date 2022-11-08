@@ -588,6 +588,7 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Confirm your location &reply_markup=" . $reply);
         }
     } else if ($transactionRow > 0) {
+
         while ($ro = mysqli_fetch_array($checkTransactionExistanceQuery)) {
             $buyer_telegram_id = $ro['buyer_telegram_id'];
             $zone = $ro['zone'];
@@ -600,6 +601,7 @@ if (isset($update->message->text)) {
             $location = $ro['location'];
         }
         if ($msg != "/cancel" && ($buyer_telegram_id != NULL && $zone == NULL)) {
+            print("hena");
             setTransactionValue($chat_id, "zone", "$msg");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Neighborhood");
         } else if ($msg != "/cancel" && ($zone != NULL && $neighborhood == NULL)) {
@@ -637,18 +639,22 @@ if (isset($update->message->text)) {
                 }
             }
         } else if ($msg != "/cancel" && ($picture != NULL && $quantity == NULL)) {
-            setTransactionValue($chat_id, "quantity", "$msg");
-            $getPrice = "SELECT * FROM price WHERE contract_name='$contract_name' ORDER BY id DESC Limit 1";
-            $getPriceQuery = mysqli_query($con, $getPrice);
-            while ($go = mysqli_fetch_array($getPriceQuery)) {
-                $coffeePrice = $go['price'];
+            if (is_numeric($msg) == TRUE) {
+                setTransactionValue($chat_id, "quantity", "$msg");
+                $getPrice = "SELECT * FROM price WHERE contract_name='$contract_name' ORDER BY id DESC Limit 1";
+                $getPriceQuery = mysqli_query($con, $getPrice);
+                while ($go = mysqli_fetch_array($getPriceQuery)) {
+                    $coffeePrice = $go['price'];
+                }
+                $quantityNumber = (int)$msg;
+                $priceNumber = (int)$coffeePrice;
+                $total = $quantityNumber * $priceNumber;
+                setTransactionValue($chat_id, "price", "$priceNumber");
+                setTransactionValue($chat_id, "total", "$total");
+                confirmTransaction($chat_id);
+            } else {
+                file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter numeric value only");
             }
-            $quantityNumber = (int)$msg;
-            $priceNumber = (int)$coffeePrice;
-            $total = $quantityNumber * $priceNumber;
-            setTransactionValue($chat_id, "price", "$priceNumber");
-            setTransactionValue($chat_id, "total", "$total");
-            confirmTransaction($chat_id);
         }
         if ($msg == "Confirm Transaction" && $price != NULL) {
             saveTransactiondata($chat_id);
@@ -697,18 +703,22 @@ if (isset($update->message->text)) {
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please add a photo of the coffee");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please use the attach button to take or select a photo. NO caption required");
         } else if ($msg != "/cancel" && ($picture != NULL && $quantity == NULL)) {
-            setCollectingValue($chat_id, "quantity", "$msg");
-            $getPrice = "SELECT * FROM picking_rate WHERE farm_name='$farm_name' ORDER BY id DESC Limit 1";
-            $getPriceQuery = mysqli_query($con, $getPrice);
-            while ($go = mysqli_fetch_array($getPriceQuery)) {
-                $coffeePrice = $go['price'];
+            if (is_numeric($msg) == TRUE) {
+                setCollectingValue($chat_id, "quantity", "$msg");
+                $getPrice = "SELECT * FROM picking_rate WHERE farm_name='$farm_name' ORDER BY id DESC Limit 1";
+                $getPriceQuery = mysqli_query($con, $getPrice);
+                while ($go = mysqli_fetch_array($getPriceQuery)) {
+                    $coffeePrice = $go['price'];
+                }
+                $quantityNumber = (int)$msg;
+                $priceNumber = (int)$coffeePrice;
+                $total = $quantityNumber * $priceNumber;
+                setCollectingValue($chat_id, "rate", "$priceNumber");
+                setCollectingValue($chat_id, "total", "$total");
+                confirmCollecting($chat_id);
+            } else {
+                file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter numeric value only");
             }
-            $quantityNumber = (int)$msg;
-            $priceNumber = (int)$coffeePrice;
-            $total = $quantityNumber * $priceNumber;
-            setCollectingValue($chat_id, "rate", "$priceNumber");
-            setCollectingValue($chat_id, "total", "$total");
-            confirmCollecting($chat_id);
         }
         if ($msg == "Confirm Process" && $rate != NULL) {
             saveCollectingdata($chat_id);

@@ -5,6 +5,7 @@ function saveTransactiondata($chat_id)
     global $con;
     date_default_timezone_set('Africa/Addis_Ababa');
     $today = date('y-m-d');
+    $time = date('h:i A');
     $checkTransactionExistance = "SELECT * FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
     $checkTransactionExistanceQuery = mysqli_query($con, $checkTransactionExistance);
     while ($ro = mysqli_fetch_array($checkTransactionExistanceQuery)) {
@@ -25,9 +26,9 @@ function saveTransactiondata($chat_id)
         $transaction_date = $ro['transaction_date'];
     }
     $saveTransactionDataToMain = "INSERT INTO transaction (buyer_telegram_id,seller_name,picture,location,longitude,latitude,zone,
-    neighborhood,contract_name,quantity,price,total,transaction_date) 
+    neighborhood,contract_name,quantity,price,total,transaction_date,time) 
     VALUE('$buyer_telegram_id','$seller_name','$picture','$location','$longitude','$latitude',
-    '$zone','$neighborhood','$contract_name','$quantity','$price','$total','$transaction_date') ";
+    '$zone','$neighborhood','$contract_name','$quantity','$price','$total','$transaction_date','$time') ";
     mysqli_query($con, $saveTransactionDataToMain);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=transaction data saved successfully");
     $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
