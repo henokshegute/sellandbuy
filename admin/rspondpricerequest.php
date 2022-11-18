@@ -9,7 +9,7 @@ function listRequestedPrice($chat_id)
     if (mysqli_num_rows($listQuery) > 0) {
 
         while ($ro = mysqli_fetch_array($listQuery)) {
-            $priceId=$ro['id'];
+            $priceId = $ro['id'];
             $telegram_id = $ro['telegram_id'];
             $price = $ro['price'];
             $contract_name = $ro['contract_name'];
@@ -20,11 +20,11 @@ function listRequestedPrice($chat_id)
             $hel = "<b>APPROVE:</b>%0A";
             $hel .= $marksHTML;
             $acceptCompany = "a ";
-            $acceptCompany .=  $telegram_id." ".$priceId;
+            $acceptCompany .=  $telegram_id . " " . $priceId;
             $delete = "n ";
-            $delete .= $telegram_id." ".$priceId;
+            $delete .= $telegram_id . " " . $priceId;
             $change = "c ";
-            $change .= $telegram_id." ".$priceId;
+            $change .= $telegram_id . " " . $priceId;
             $keyboard = json_encode(["inline_keyboard" => [[
                 ["text" => " ✔️ Accept", "callback_data" => $acceptCompany],
                 ["text" => " ❌ Decline", "callback_data" => $delete],
@@ -37,7 +37,7 @@ function listRequestedPrice($chat_id)
     }
 }
 
-function accept($id, $chat_id, $message_id,$priceId)
+function accept($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
@@ -69,7 +69,7 @@ function accept($id, $chat_id, $message_id,$priceId)
     ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
     file_get_contents($botAPI . "/editMessageReplyMarkup?chat_id=" . $chat_id . "&message_id=" . $message_id . "&reply_markup={$keyboard}");
 }
-function declinePrice($id, $chat_id, $message_id,$priceId)
+function declinePrice($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
@@ -99,7 +99,7 @@ function declinePrice($id, $chat_id, $message_id,$priceId)
     ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
     file_get_contents($botAPI . "/editMessageReplyMarkup?chat_id=" . $chat_id . "&message_id=" . $message_id . "&reply_markup={$keyboard}");
 }
-function changeprice($id, $chat_id, $message_id,$priceId)
+function changeprice($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
@@ -111,7 +111,7 @@ function changeprice($id, $chat_id, $message_id,$priceId)
 
         $priceid = $ro['id'];
         $telegram_id = $ro['telegram_id'];
-      //  $admin_telegram_id = $ro['admin_telegram_id'];
+        //  $admin_telegram_id = $ro['admin_telegram_id'];
         $price = $ro['price'];
         $contract_name = $ro['contract_name'];
         $date_registered = $ro['date_registered'];
@@ -134,6 +134,7 @@ function listPickengRate($chat_id)
 
         while ($ro = mysqli_fetch_array($listQuery)) {
             $telegram_id = $ro['telegram_id'];
+            $priceId = $ro['id'];
             $price = $ro['price'];
             $farm_name = $ro['farm_name'];
             $date_registered = $ro['date_registered'];
@@ -143,11 +144,11 @@ function listPickengRate($chat_id)
             $hel = "<b>Aprove:</b>%0A";
             $hel .= $marksHTML;
             $acceptRate = "acceptRate ";
-            $acceptRate .=  $telegram_id;
+            $acceptRate .=  $telegram_id . " " . $priceId;
             $deleteRate = "declineRate ";
-            $deleteRate .= $telegram_id;
+            $deleteRate .= $telegram_id . " " . $priceId;
             $changeRate = "changeRate ";
-            $changeRate .= $telegram_id;
+            $changeRate .= $telegram_id . " " . $priceId;
             $keyboard = json_encode(["inline_keyboard" => [[
                 ["text" => " ✔️ Accept", "callback_data" => $acceptRate],
                 ["text" => " ❌ Decline", "callback_data" => $deleteRate],
@@ -160,21 +161,22 @@ function listPickengRate($chat_id)
     }
 }
 //////////////////////////////////////////////
-function acceptRate($id, $chat_id, $message_id,$priceId)
+function acceptRate($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
     date_default_timezone_set('Africa/Addis_Ababa');
     $today = date('y-m-d');
-    $listStatement = "SELECT * From picking_ratetemp where='$priceId'";
+    $listStatement = "SELECT * From picking_ratetemp where id='$priceId'";
     $listQuery = mysqli_query($con, $listStatement);
+
     while ($ro = mysqli_fetch_array($listQuery)) {
         $priceid = $ro['id'];
         $telegram_id = $ro['telegram_id'];
         $price = $ro['price'];
         $farm_name = $ro['farm_name'];
-        $date_registered = $ro['date_registered'];
     }
+    print_r(mysqli_fetch_array($listQuery));
     $updatePriceTable = "INSERT INTO picking_rate(telegram_id,farm_name,price,date_registered) VALUES('$telegram_id','$farm_name','$price','$today')";
     mysqli_query($con,  $updatePriceTable);
     $del = "DELETE FROM picking_ratetemp WHERE telegram_id='$id' && id='$priceid'";
@@ -193,13 +195,13 @@ function acceptRate($id, $chat_id, $message_id,$priceId)
     file_get_contents($botAPI . "/editMessageReplyMarkup?chat_id=" . $chat_id . "&message_id=" . $message_id . "&reply_markup={$keyboard}");
 }
 
-function declineRate($id, $chat_id, $message_id,$priceId)
+function declineRate($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
     date_default_timezone_set('Africa/Addis_Ababa');
     $today = date('y-m-d');
-    $listStatement = "SELECT * From picking_ratetemp id='$priceId'";
+    $listStatement = "SELECT * From picking_ratetemp WHERE id= '$priceId'";
     $listQuery = mysqli_query($con, $listStatement);
     while ($ro = mysqli_fetch_array($listQuery)) {
 
@@ -223,19 +225,18 @@ function declineRate($id, $chat_id, $message_id,$priceId)
     ],], 'resize_keyboard' => true, "one_time_keyboard" => true]);
     file_get_contents($botAPI . "/editMessageReplyMarkup?chat_id=" . $chat_id . "&message_id=" . $message_id . "&reply_markup={$keyboard}");
 }
-function changerate($id, $chat_id, $message_id,$priceId)
+function changerate($id, $chat_id, $message_id, $priceId)
 {
     global $botAPI;
     global $con;
     date_default_timezone_set('Africa/Addis_Ababa');
     $today = date('y-m-d');
-    $listStatement = "SELECT * From picking_ratetemp where ='$priceId'";
+    $listStatement = "SELECT * From picking_ratetemp where id='$priceId'";
     $listQuery = mysqli_query($con, $listStatement);
     while ($ro = mysqli_fetch_array($listQuery)) {
 
         $priceid = $ro['id'];
         $telegram_id = $ro['telegram_id'];
-        $admin_telegram_id = $ro['admin_telegram_id'];
         $price = $ro['price'];
         $farm_name = $ro['farm_name'];
         $date_registered = $ro['date_registered'];

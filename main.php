@@ -47,6 +47,7 @@ if (isset($update->message->text)) {
     $checkUserTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id' && role='super admin'";
     $checkUserTempExistanceQuery = mysqli_query($con, $checkUserTempExistance);
     $userTempRow = mysqli_num_rows($checkUserTempExistanceQuery);
+
     //////////////////////////////
     $checkBuyerTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id' && role='scale man'";
     $checkBuyerTempExistanceQuery = mysqli_query($con, $checkBuyerTempExistance);
@@ -141,6 +142,93 @@ if (isset($update->message->text)) {
         $deletpickersRequest = $con->query("DELETE FROM pickers_temp where  admin_telegram_id='$chat_id' ");
         $deletcollectingRequest = $con->query("DELETE FROM collecting_temp where  buyer_telegram_id='$chat_id' ");
         $deletcompanyRequest = $con->query("DELETE FROM company_temp where telegram_id='$chat_id' ");
+        ////////////////////////////////////////////////
+        $systemowner = "SELECT * FROM system_owner Where telegram_id='$chat_id'";
+        $systemownerQuery = mysqli_query($con, $systemowner);
+        $ownerRow = mysqli_num_rows($systemownerQuery);
+        ///////////////////////////////
+        $checkUserTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id' && role='super admin'";
+        $checkUserTempExistanceQuery = mysqli_query($con, $checkUserTempExistance);
+        $userTempRow = mysqli_num_rows($checkUserTempExistanceQuery);
+        //////////////////////////////
+        $checkBuyerTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id' && role='scale man'";
+        $checkBuyerTempExistanceQuery = mysqli_query($con, $checkBuyerTempExistance);
+        $buyerTempRow = mysqli_num_rows($checkBuyerTempExistanceQuery);
+        //////////////////////////////
+        $checkFarmAdminTempExistance = "SELECT * FROM company_users_temp WHERE company_telegram_id  ='$chat_id' && role='admin'";
+        $checkFarmAdminTempExistanceQuery = mysqli_query($con, $checkFarmAdminTempExistance);
+        $FarmadminTempRow = mysqli_num_rows($checkFarmAdminTempExistanceQuery);
+        //////////////////////////////
+        //////////////////////////////
+        $checkCompanyExistance = "SELECT * FROM company WHERE telegram_id ='$chat_id'";
+        $checkCompanyExistanceQuery = mysqli_query($con, $checkCompanyExistance);
+        $companyRow = mysqli_num_rows($checkCompanyExistanceQuery);
+        ////////////////////////////////
+        $checkUserExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='super admin'";
+        $checkUserExistanceQuery = mysqli_query($con, $checkUserExistance);
+        $AdminRow = mysqli_num_rows($checkUserExistanceQuery);
+        ////////////////////////////////
+        $checkFarmadminExistance = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='admin'";
+        $checkFarmadminExistanceQuery = mysqli_query($con, $checkFarmadminExistance);
+        $FarmAdminRow = mysqli_num_rows($checkFarmadminExistanceQuery);
+        ////////////////////////////////
+        $checkUserExistanceBuyer = "SELECT * FROM company_users WHERE telegram_username ='$tguser' && role='scale man'";
+        $checkUserExistanceQueryBuyer = mysqli_query($con, $checkUserExistanceBuyer);
+        $buyerRow = mysqli_num_rows($checkUserExistanceQueryBuyer);
+        ////////////////////////////
+        $checkSellerTempExistance = "SELECT * FROM sellers_temp WHERE admin_telegram_id ='$chat_id'";
+        $checkSellerTempExistanceQuery = mysqli_query($con, $checkSellerTempExistance);
+        $sellerRow = mysqli_num_rows($checkSellerTempExistanceQuery);
+        ////////////////////////////////////////////////////
+        $checkCompanyExistanceTemp = "SELECT * FROM company_temp WHERE telegram_id ='$chat_id'";
+        $checkCompanyExistanceTempQuery = mysqli_query($con, $checkCompanyExistanceTemp);
+        $companyRowTemp = mysqli_num_rows($checkCompanyExistanceTempQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkTransactionExistance = "SELECT * FROM transaction_temp WHERE buyer_telegram_id='$chat_id' AND edit='FALSE'";
+        $checkTransactionExistanceQuery = mysqli_query($con, $checkTransactionExistance);
+        $transactionRow = mysqli_num_rows($checkTransactionExistanceQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkCollectingExistance = "SELECT * FROM collecting_temp WHERE buyer_telegram_id='$chat_id' ";
+        $checkCollectingExistanceQuery = mysqli_query($con, $checkCollectingExistance);
+        $collectingRow = mysqli_num_rows($checkCollectingExistanceQuery);
+        ////////////////////////////////////////////////////////////////////
+        $checkPriceExistance = "SELECT * FROM price_temp WHERE telegram_id='$chat_id'";
+        $checkPriceExistanceQuery = mysqli_query($con, $checkPriceExistance);
+        $priceRow = mysqli_num_rows($checkPriceExistanceQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkRateExistance = "SELECT * FROM picking_ratetemp WHERE telegram_id='$chat_id'";
+        $checkRateExistanceQuery = mysqli_query($con, $checkRateExistance);
+        $rateRow = mysqli_num_rows($checkRateExistanceQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkEditPriceExistance = "SELECT * FROM edit_price WHERE telegram_id='$chat_id'";
+        $checkEditPriceExistanceQuery = mysqli_query($con, $checkEditPriceExistance);
+        $EditpriceRow = mysqli_num_rows($checkEditPriceExistanceQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkEditRateExistance = "SELECT * FROM edit_rate WHERE telegram_id='$chat_id'";
+        $checkEditRateExistanceQuery = mysqli_query($con, $checkEditRateExistance);
+        $EditRateRow = mysqli_num_rows($checkEditRateExistanceQuery);
+        ///////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////
+        $checkReport = "SELECT * FROM report WHERE telegram_id='$chat_id'";
+        $checkReportQuery = mysqli_query($con, $checkReport);
+        $reportRow = mysqli_num_rows($checkReportQuery);
+        /////////////////////////////////////////////////////////////////////
+        $transactionReport = "SELECT * FROM report Where transaction='$chat_id'";
+        $transactionReportQuery = mysqli_query($con, $transactionReport);
+        $tReportRow = mysqli_num_rows($transactionReportQuery);
+        /////////////////////////////////////////////////////////////////////
+        $pickingReport = "SELECT * FROM report Where picking='$chat_id'";
+        $pickingReportQuery = mysqli_query($con, $pickingReport);
+        $pReportRow = mysqli_num_rows($pickingReportQuery);
+        //////////////////////////////////////////////////////////////////////
+        $coffeeContract = "SELECT * FROM coffee_contract WHERE telegram_id='$chat_id'";
+        $coffeeContractQuery = mysqli_query($con, $coffeeContract);
+        $coffeeContractQuantity = mysqli_num_rows($coffeeContractQuery);
+        /////////////////////////////////////////////////////////////////////
+        $checkPickerTempExistance = "SELECT * FROM pickers_temp WHERE admin_telegram_id='$chat_id'";
+        $checkPickerTempQuery = mysqli_query($con, $checkPickerTempExistance);
+        $pickerRow = mysqli_num_rows($checkPickerTempQuery);
+        ////////////////////////////////////////////////
         if ($ownerRow > 0) {
             ownerMenu($chat_id);
         } else if ($companyRow > 0) {
@@ -583,11 +671,13 @@ if (isset($update->message->text)) {
     ////////////////////Transaction///////////////////////
     if ($transactionRow < 1) {
         if ($msg == "Buy" && $buyerRow > 0) {
+            $inserQuery = $con->query("INSERT INTO transaction_temp(buyer_telegram_id,transaction_date,status) VALUES('$chat_id','$today','TRUE')");
             $keyboard = array(array(array("text" => "Send Location", "request_location" => true, "has_protected_content" => true,)));
             $reply = json_encode(array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true));
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Confirm your location &reply_markup=" . $reply);
         }
-    } else if ($transactionRow > 0) {
+    }
+    if ($transactionRow > 0) {
 
         while ($ro = mysqli_fetch_array($checkTransactionExistanceQuery)) {
             $buyer_telegram_id = $ro['buyer_telegram_id'];
@@ -600,8 +690,7 @@ if (isset($update->message->text)) {
             $price = $ro['price'];
             $location = $ro['location'];
         }
-        if ($msg != "/cancel" && ($buyer_telegram_id != NULL && $zone == NULL)) {
-            print("hena");
+        if ($msg != "/cancel" && ($location != NULL && $zone == NULL)) {
             setTransactionValue($chat_id, "zone", "$msg");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Neighborhood");
         } else if ($msg != "/cancel" && ($zone != NULL && $neighborhood == NULL)) {
@@ -670,8 +759,10 @@ if (isset($update->message->text)) {
     ///////////////////// Collecting Cofee/////////////////////////////////
     if ($collectingRow < 1) {
         if ($msg == "Collect" && $buyerRow > 0) {
-            $inserQuery = $con->query("INSERT INTO collecting_temp(buyer_telegram_id,collecting_date) VALUES('$chat_id','$today')");
-            searchPickers($chat_id);
+            $inserQuery = $con->query("INSERT INTO  collecting_temp(buyer_telegram_id,collecting_date,status) VALUES('$chat_id','$today','TRUE')");
+            $keyboard = array(array(array("text" => "Send Location", "request_location" => true, "has_protected_content" => true,)));
+            $reply = json_encode(array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true));
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Confirm your location &reply_markup=" . $reply);
         }
     } else if ($collectingRow > 0) {
         while ($ro = mysqli_fetch_array($checkCollectingExistanceQuery)) {
@@ -679,12 +770,19 @@ if (isset($update->message->text)) {
             $zone = $ro['zone'];
             $neighborhood = $ro['neighborhood'];
             $farm_name = $ro['farm_name'];
+            $location = $ro['location'];
             $picker_name = $ro['picker_name'];
             $picture = $ro['picture'];
             $quantity = $ro['quantity'];
             $rate = $ro['rate'];
         }
-        if ($msg != "/cancel" && $msg == "🔍 Search") {
+        if ($msg != "/cancel" && ($location != NULL && $zone == NULL)) {
+            setCollectingValue($chat_id, "zone", "$msg");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Neighborhood");
+        } else if ($msg != "/cancel" && ($zone != NULL && $neighborhood == NULL)) {
+            setCollectingValue($chat_id, "neighborhood", "$msg");
+            searchPickers($chat_id);
+        } else if ($msg != "/cancel" && $msg == "🔍 Search") {
             $data = http_build_query(['text' => 'Search picker using the button below. If the picker is not registerd press cancel from the menu with three bars on the left, and register him/her before the transaction.', 'chat_id' => $chat_id]);
             $keyboard = json_encode([
                 "inline_keyboard" => [[
@@ -692,7 +790,7 @@ if (isset($update->message->text)) {
                 ],], 'resize_keyboard' => true, "one_time_keyboard" => true
             ]);
             file_get_contents($botAPI . "/sendMessage?{$data}&reply_markup={$keyboard}");
-        } else if ($msg != "/cancel" && ($buyer_telegram_id != NULL && $picker_name == NULL)) {
+        } else if ($msg != "/cancel" && ($neighborhood != NULL && $picker_name == NULL)) {
             $farmname = "SELECT * FROM company_users WHERE telegram_id='$buyer_telegram_id' ";
             $farmnameQuery = mysqli_query($con, $farmname);
             while ($fa = mysqli_fetch_array($farmnameQuery)) {
@@ -759,7 +857,6 @@ if (isset($update->message->text)) {
             while ($ro = mysqli_fetch_array($companyNameQuery)) {
                 $companyName = $ro['assigned_farm'];
             }
-            print_r($companyName);
             pickingReportByContract($chat_id, $companyName);
         }
     }
@@ -1065,20 +1162,46 @@ if (isset($update->message->text)) {
     $chat_id = $update->message->chat->id;
     disableForwarding($chat_id);
 } else if (isset($update->message->location)) {
-    date_default_timezone_set('Africa/Addis_Ababa');
-    $today = date('y-m-d');
-    $transactionlong = $update->message->location->longitude;
-    $transactionlat = $update->message->location->latitude;
-    $fulllocation = ("$transactionlat,$transactionlong");
-    $transactionLocation = getAddress($transactionlat, $transactionlong);
     $chat_id = $update->message->chat->id;
-    $inserQuery = $con->query("INSERT INTO transaction_temp(buyer_telegram_id,location,transaction_date,longitude,latitude) VALUES('$chat_id','$transactionLocation','$today',$transactionlong,$transactionlat)");
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
+    $checkTransactionExistance = "SELECT * FROM transaction_temp WHERE buyer_telegram_id='$chat_id' AND edit='FALSE'";
+    $checkTransactionExistanceQuery = mysqli_query($con, $checkTransactionExistance);
+    $transactionRow = mysqli_num_rows($checkTransactionExistanceQuery);
+    $transactiondata = mysqli_fetch_array($checkTransactionExistanceQuery);
+    /////////////////////////////////////////////////
+    $checkCollectingExistance = "SELECT * FROM collecting_temp WHERE buyer_telegram_id='$chat_id' ";
+    $checkCollectingExistanceQuery = mysqli_query($con, $checkCollectingExistance);
+    $collectingRow = mysqli_num_rows($checkCollectingExistanceQuery);
+    $collectingdata = mysqli_fetch_array($checkCollectingExistanceQuery);
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    if ($transactionRow > 0) {
+
+        date_default_timezone_set('Africa/Addis_Ababa');
+        $today = date('y-m-d');
+        $transactionlong = $update->message->location->longitude;
+        $transactionlat = $update->message->location->latitude;
+        $fulllocation = ("$transactionlat,$transactionlong");
+        $transactionLocation = getAddress($transactionlat, $transactionlong);
+        $updateTransactionLocation = "UPDATE transaction_temp SET location='$transactionLocation', longitude='$transactionlong', latitude ='$transactionlat' WHERE buyer_telegram_id ='$chat_id'";
+        mysqli_query($con, $updateTransactionLocation);
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
+    } else if ($collectingRow > 0) {
+
+        date_default_timezone_set('Africa/Addis_Ababa');
+        $today = date('y-m-d');
+        $transactionlong = $update->message->location->longitude;
+        $transactionlat = $update->message->location->latitude;
+        $fulllocation = ("$transactionlat,$transactionlong");
+        $transactionLocation = getAddress($transactionlat, $transactionlong);
+        $updateCollectingLocation = "UPDATE collecting_temp SET location='$transactionLocation', longitude='$transactionlong', latitude ='$transactionlat' WHERE buyer_telegram_id ='$chat_id'";
+        mysqli_query($con, $updateCollectingLocation);
+        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
+    }
 } else if (isset($update->callback_query->data)) {
     $chat_id = $update->callback_query->from->id;
     $message_id =  $update->callback_query->message->message_id;
 
     list($first, $second, $third) = explode(" ", $update->callback_query->data);
+  //  print_r($first,$second,$third);
     if ($first == "e") {
         acceptCompany($second, $chat_id, $message_id);
     } else if ($first == "d") {

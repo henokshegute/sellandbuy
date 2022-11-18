@@ -13,9 +13,7 @@ function confirmTransaction($chat_id)
         $zone = $ro['zone'];
         $neighborhood = $ro['neighborhood'];
         $contract_name = $ro['contract_name'];
-        // $process = $ro['process'];
         $seller_name = $ro['seller_name'];
-        // $coffee_grade = $ro['coffee_grade'];
         $quantity = $ro['quantity'];
         $price = $ro['price'];
         $location = $ro['location'];
@@ -28,8 +26,6 @@ function confirmTransaction($chat_id)
     $marksHTML .= "<b>Zone :- </b>" . strtolower($zone) . "%0A";
     $marksHTML .= "<b>Neighborhood :- </b>" . strtolower($neighborhood) . "%0A";
     $marksHTML .= "<b>Origin:- </b>" . strtolower($contract_name) . "%0A";
-    // $marksHTML .= "<b>Process:- </b>" . strtolower($process) . "%0A";
-    // $marksHTML .= "<b>Coffee_grade:- </b>" . strtolower($coffee_grade) . "%0A";
     $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
     $marksHTML .= "<b>1kg price :- </b>" . strtolower($price) . "%0A";
     $marksHTML .= "<b>Total price :- </b>" . strtolower($total) . "%0A";
@@ -55,17 +51,10 @@ function confirmCollecting($chat_id)
         $price = $ro['rate'];
         $total = $ro['total'];
         $picture = $ro['picture'];
-        // $zone = $ro['zone'];
-        // $neighborhood = $ro['neighborhood'];
-        // $process = $ro['process'];
-        // $coffee_grade = $ro['coffee_grade'];
-        // $location = $ro['location'];
     }
     $marksHTML = "";
     $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
     $marksHTML .= "<b>Origin:- </b>" . strtolower($farm_name) . "%0A";
-    // $marksHTML .= "<b>Process:- </b>" . strtolower($process) . "%0A";
-    // $marksHTML .= "<b>Coffee_grade:- </b>" . strtolower($coffee_grade) . "%0A";
     $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
     $marksHTML .= "<b>1kg Rate :- </b>" . strtolower($price) . "%0A";
     $marksHTML .= "<b>Total Picking price :- </b>" . strtolower($total) . "%0A";

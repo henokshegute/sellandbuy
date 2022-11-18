@@ -34,8 +34,7 @@ function reportAll($chat_id)
             $total = $ro['total'];
             $picture = $ro['picture'];
             $transaction_date = $ro['transaction_date'];
-            $tStamp = $ro['time'];
-            list($date, $time) = explode(" ", $tStamp);
+            $time=$ro['time'];
             $hel = "<b>TRANSACTION REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
@@ -152,14 +151,12 @@ function reportByContract($chat_id, $msg)
             $location = $ro['location'];
             $longtiude = $ro['longitude'];
             $latitude = $ro['latitude'];
-            // $coffee_grade = $ro['coffee_grade'];
             $quantity = $ro['quantity'];
             $price = $ro['price'];
             $total = $ro['total'];
             $picture = $ro['picture'];
             $transaction_date = $ro['transaction_date'];
-            $tStamp = $ro['time'];
-            list($date, $time) = explode(" ", $tStamp);
+            $time = $ro['time'];
             $hel = "<b>TRANSACTION REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Seller name :- </b>" . strtolower($seller_name) . "%0A";
@@ -226,8 +223,8 @@ function pickingReportAll($chat_id)
             $rate = $ro['rate'];
             $total = $ro['total'];
             $picture = $ro['picture'];
-            $transaction_date = $ro['collecting_date'];
-
+            $collecting_date = $ro['collecting_date'];
+            $time = $ro['time'];
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
@@ -235,6 +232,8 @@ function pickingReportAll($chat_id)
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
             $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
+            $marksHTML .= "<b>Picking Date:- </b>" . strtolower($collecting_date) . "%0A";
+            $marksHTML .= "<b>Picking Time:- </b>" . strtolower($time) . "%0A";
             $hel .= $marksHTML;
             $viewPicker = "P ";
             $viewPicker .=  $picker_name;
@@ -315,7 +314,7 @@ function pickingReportByContract($chat_id, $msg)
     $date = date_create("$today");
     $dateInterval = date_sub($date, date_interval_create_from_date_string("2 days"));
     $reportInterval = date_format($dateInterval, "y-m-d");
-    $listDailyTransaction = "SELECT * FROM collecting where collecting_date='$reportInterval' && farm_name='$msg'";
+    $listDailyTransaction = "SELECT * FROM collecting where collecting_date >='$reportInterval' && farm_name='$msg'";
     $listDailyTransactionQuery = mysqli_query($con, $listDailyTransaction);
     $TransactionRow = mysqli_num_rows($listDailyTransactionQuery);
     if ($TransactionRow > 0) {
@@ -327,13 +326,15 @@ function pickingReportByContract($chat_id, $msg)
             $total = $ro['total'];
             $picture = $ro['picture'];
             $collecting_date = $ro['collecting_date'];
-
+            $time=$ro['time'];
             $hel = "<b>PICKING REPORT</b>%0A";
             $marksHTML = "";
             $marksHTML .= "<b>Picker name :- </b>" . strtolower($picker_name) . "%0A";
             $marksHTML .= "<b>Quantity :- </b>" . strtolower($quantity) . "%0A";
             $marksHTML .= "<b>1kg Rate :-</b> " . strtolower($rate) . "%0A";
             $marksHTML .= "<b>Total payment:- </b>" . strtolower($total) . "%0A";
+            $marksHTML .= "<b>Picking Date:- </b>" . strtolower($collecting_date) . "%0A";
+            $marksHTML .= "<b>Picking Time:- </b>" . strtolower($time) . "%0A";
             $hel .= $marksHTML;
             $viewPicker = "P ";
             $viewPicker .=  $picker_name;
