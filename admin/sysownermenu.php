@@ -11,7 +11,7 @@ function ownerMenu($chat_id)
 function  companyAdminMainMenu($chat_id)
 {
     global $botAPI;
-    $keyboard = array(array("Register Admin"), array("Approve Price", "Approve Rate"));
+    $keyboard = array(array("Register Admin"), array("Cherry Price", "Picking Rate"));
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text= Welcome &reply_markup=" . $reply);

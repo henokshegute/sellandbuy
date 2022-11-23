@@ -1093,11 +1093,11 @@ if (isset($update->message->text)) {
             companyAdminMainMenu($chat_id);
         }
     }
-    //////////////////////////////////////////////////////////////
-    if ($msg == 'Approve Price' && $companyRow > 0) {
+    /////////////////////////////////////////////////////////////
+    if ($msg == 'Cherry Price' && $companyRow > 0) {
         listRequestedPrice($chat_id);
     }
-    if ($msg == 'Approve Rate' && $companyRow > 0) {
+    if ($msg == 'Picking Rate' && $companyRow > 0) {
         listPickengRate($chat_id);
     }
     if ($msg == '/cancel') {
