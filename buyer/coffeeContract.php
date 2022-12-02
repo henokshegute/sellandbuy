@@ -3,7 +3,7 @@ function coffeeContractMenu($chat_id)
 {
     global $con;
     global $botAPI;
-    $coffeeContract = "SELECT * FROM coffee_contract";
+    $coffeeContract = "SELECT * FROM coffee_contract WHERE status='TRUE'";
     $coffeeContractQuery = mysqli_query($con, $coffeeContract);
     $coffeeContractQuantity = mysqli_num_rows($coffeeContractQuery);
     $contract_name_array = [];
@@ -32,10 +32,29 @@ function washedUnwashed($chat_id)
 }
 function confirmFarm($chat_id)
 {
+    global $con;
     global $botAPI;
     $keyboard = array(array("Confirm Farm", "Discard Farm"));
+    $coffeeContract = "SELECT * FROM coffee_contract WHERE telegram_id='$chat_id' && status ='FALSE'";
+    $coffeeContractQuery = mysqli_query($con, $coffeeContract);
+    $coffeeContractQuantity = mysqli_num_rows($coffeeContractQuery);
+    while ($ro = mysqli_fetch_array($coffeeContractQuery)) {
+        $telegram_id = $ro['telegram_id'];
+        $coffee_contract = $ro['contract_name'];
+        $longitude = $ro['longitude'];
+        $latitude = $ro['latitude'];
+        $zone = $ro['zone'];
+        $neighborhood = $ro['neighborhood'];
+    }
+    $marksHTML = "";
+    $marksHTML .= "<b>Farm name:- </b>" . strtolower($coffee_contract) . "%0A";
+    $marksHTML .= "<b>Zone:-</b>" . strtolower($zone) . "%0A";
+    $marksHTML .= "<b>Neighborhood:-</b>" . strtolower($neighborhood) . "%0A";
+    $marksHTML .= "<b>Longitude:-</b>" . strtolower($longitude) . "%0A";
+    $marksHTML .= "<b>Latitude:-</b>" . strtolower($latitude) . "%0A";
+    $hel = "<b>CONFIRM</b>%0A";
+    $hel .= $marksHTML;
     $resp = array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true);
     $reply = json_encode($resp);
-    $message = "Please confirm";
-    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $message . "&reply_markup=" . $reply);
+    file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=" . $hel . "&reply_markup=" . $reply . "&parse_mode=html");
 }

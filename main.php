@@ -119,7 +119,7 @@ if (isset($update->message->text)) {
     $pickingReportQuery = mysqli_query($con, $pickingReport);
     $pReportRow = mysqli_num_rows($pickingReportQuery);
     //////////////////////////////////////////////////////////////////////
-    $coffeeContract = "SELECT * FROM coffee_contract WHERE telegram_id='$chat_id'";
+    $coffeeContract = "SELECT * FROM coffee_contract WHERE telegram_id='$chat_id' && status ='FALSE'";
     $coffeeContractQuery = mysqli_query($con, $coffeeContract);
     $coffeeContractQuantity = mysqli_num_rows($coffeeContractQuery);
     /////////////////////////////////////////////////////////////////////
@@ -760,9 +760,8 @@ if (isset($update->message->text)) {
     if ($collectingRow < 1) {
         if ($msg == "Collect" && $buyerRow > 0) {
             $inserQuery = $con->query("INSERT INTO  collecting_temp(buyer_telegram_id,collecting_date,status) VALUES('$chat_id','$today','TRUE')");
-            $keyboard = array(array(array("text" => "Send Location", "request_location" => true, "has_protected_content" => true,)));
-            $reply = json_encode(array("keyboard" => $keyboard, "resize_keyboard" => true, "one_time_keyboard" => true));
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Confirm your location &reply_markup=" . $reply);
+            // file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
+            searchPickers($chat_id);
         }
     } else if ($collectingRow > 0) {
         while ($ro = mysqli_fetch_array($checkCollectingExistanceQuery)) {
@@ -776,13 +775,7 @@ if (isset($update->message->text)) {
             $quantity = $ro['quantity'];
             $rate = $ro['rate'];
         }
-        if ($msg != "/cancel" && ($location != NULL && $zone == NULL)) {
-            setCollectingValue($chat_id, "zone", "$msg");
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Neighborhood");
-        } else if ($msg != "/cancel" && ($zone != NULL && $neighborhood == NULL)) {
-            setCollectingValue($chat_id, "neighborhood", "$msg");
-            searchPickers($chat_id);
-        } else if ($msg != "/cancel" && $msg == "🔍 Search") {
+        if ($msg != "/cancel" && $msg == "🔍 Search") {
             $data = http_build_query(['text' => 'Search picker using the button below. If the picker is not registerd press cancel from the menu with three bars on the left, and register him/her before the transaction.', 'chat_id' => $chat_id]);
             $keyboard = json_encode([
                 "inline_keyboard" => [[
@@ -790,14 +783,27 @@ if (isset($update->message->text)) {
                 ],], 'resize_keyboard' => true, "one_time_keyboard" => true
             ]);
             file_get_contents($botAPI . "/sendMessage?{$data}&reply_markup={$keyboard}");
-        } else if ($msg != "/cancel" && ($neighborhood != NULL && $picker_name == NULL)) {
+        } else if ($msg != "/cancel" && ($buyer_telegram_id != NULL && $picker_name == NULL)) {
             $farmname = "SELECT * FROM company_users WHERE telegram_id='$buyer_telegram_id' ";
             $farmnameQuery = mysqli_query($con, $farmname);
             while ($fa = mysqli_fetch_array($farmnameQuery)) {
                 $farmName = $fa['assigned_farm'];
             }
-            setCollectingValue($chat_id, "picker_name", "$msg");
+            $location = "SELECT * FROM coffee_contract WHERE contract_name ='$farmName'";
+            $locationQuery = mysqli_query($con, $location);
+            while ($lo = mysqli_fetch_array($locationQuery)) {
+                $long = $lo['longitude'];
+                $lat = $lo['latitude'];
+                $farmZone = $lo['zone'];
+                $farmNigh = $lo['neighborhood'];
+            }
+
+            setCollectingValue($chat_id, 'latitude', "$lat");
+            setCollectingValue($chat_id, "longitude", "$long");
             setCollectingValue($chat_id, "farm_name", "$farmName");
+            setCollectingValue($chat_id, "zone", "$farmZone");
+            setCollectingValue($chat_id, "neighborhood", "$farmNigh");
+            setCollectingValue($chat_id, "picker_name", "$msg");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please add a photo of the coffee");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please use the attach button to take or select a photo. NO caption required");
         } else if ($msg != "/cancel" && ($picture != NULL && $quantity == NULL)) {
@@ -823,9 +829,9 @@ if (isset($update->message->text)) {
             buyerMenu($chat_id);
         }
         if ($msg == "Discard Process" && $rate != NULL) {
-            $delettransactionfromtemp = "DELETE FROM transaction_temp WHERE buyer_telegram_id='$chat_id'";
+            $delettransactionfromtemp = "DELETE FROM collecting_temp WHERE buyer_telegram_id='$chat_id'";
             mysqli_query($con, $delettransactionfromtemp);
-            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Transaction canceled");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Process canceled");
             buyerMenu($chat_id);
         }
     }
@@ -1127,25 +1133,44 @@ if (isset($update->message->text)) {
         }
     }
     /////////////////////////////////////////////////////////////////
-    if ($msg == "Add New Farm" && $AdminRow > 0) {
-        $inserQuery = $con->query("INSERT INTO coffee_contract(telegram_id,date_registered) VALUES('$chat_id','$today')");
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm name.");
+    if ($coffeeContractQuantity < 1 && $AdminRow > 0) {
+        if ($msg == "Add New Farm") {
+            $inserQuery = $con->query("INSERT INTO coffee_contract(telegram_id,date_registered) VALUES('$chat_id','$today')");
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm name.");
+        }
     } else if ($coffeeContractQuantity > 0) {
+
         while ($ro = mysqli_fetch_array($coffeeContractQuery)) {
             $telegram_id = $ro['telegram_id'];
             $coffee_contract = $ro['contract_name'];
+            $longitude = $ro['longitude'];
+            $latitude = $ro['latitude'];
+            $zone = $ro['zone'];
+            $neighborhood = $ro['neighborhood'];
             $status = $ro['status'];
         }
         if ((($telegram_id != NULL && $coffee_contract == NULL) && $status == "FALSE") && $msg != "/cancel") {
             setFarmValue($chat_id, "contract_name", $msg);
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm neighborhood.");
+        } else if ((($coffee_contract != NULL && $neighborhood == NULL) && $status == "FALSE") && $msg != "/cancel") {
+            setFarmValue($chat_id, "neighborhood", $msg);
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm zone.");
+        } else if ((($neighborhood != NULL && $zone == NULL) && $status == "FALSE") && $msg != "/cancel") {
+            setFarmValue($chat_id, "zone", $msg);
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm latitude.");
+        } else if ((($zone != NULL && $latitude == NULL) && $status == "FALSE") && $msg != "/cancel") {
+            setFarmValue($chat_id, "latitude", $msg);
+            file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter farm longitude.");
+        } else if ((($latitude != NULL && $longitude == NULL) && $status == "FALSE") && $msg != "/cancel") {
+            setFarmValue($chat_id, "longitude", $msg);
             confirmFarm($chat_id);
         }
-        if (($msg == "Confirm Farm" && $coffee_contract != NULL) && $status == "FALSE") {
+        if (($msg == "Confirm Farm" && $longitude != NULL) && $status == "FALSE") {
             setFarmValue($chat_id, "status", "TRUE");
             file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Farm registration complete, please add a price for this farm by selecting Request Price on the menu.");
             superAdminMenu($chat_id);
         }
-        if (($msg == "Discard Farm" && $coffee_contract != NULL) && $status == "FALSE") {
+        if (($msg == "Discard Farm" && $longitude != NULL) && $status == "FALSE") {
             $lastid = "SELECT * FROM coffee_contract WHERE telegram_id='$chat_id' && status='FALSE'ORDER BY id DESC Limit 1";
             $lastidquery = mysqli_query($con, $lastid);
             while ($ro = mysqli_fetch_array($lastidquery)) {
@@ -1184,24 +1209,13 @@ if (isset($update->message->text)) {
         $updateTransactionLocation = "UPDATE transaction_temp SET location='$transactionLocation', longitude='$transactionlong', latitude ='$transactionlat' WHERE buyer_telegram_id ='$chat_id'";
         mysqli_query($con, $updateTransactionLocation);
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
-    } else if ($collectingRow > 0) {
-
-        date_default_timezone_set('Africa/Addis_Ababa');
-        $today = date('y-m-d');
-        $transactionlong = $update->message->location->longitude;
-        $transactionlat = $update->message->location->latitude;
-        $fulllocation = ("$transactionlat,$transactionlong");
-        $transactionLocation = getAddress($transactionlat, $transactionlong);
-        $updateCollectingLocation = "UPDATE collecting_temp SET location='$transactionLocation', longitude='$transactionlong', latitude ='$transactionlat' WHERE buyer_telegram_id ='$chat_id'";
-        mysqli_query($con, $updateCollectingLocation);
-        file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter zone.");
     }
 } else if (isset($update->callback_query->data)) {
     $chat_id = $update->callback_query->from->id;
     $message_id =  $update->callback_query->message->message_id;
 
     list($first, $second, $third) = explode(" ", $update->callback_query->data);
-  //  print_r($first,$second,$third);
+    //  print_r($first,$second,$third);
     if ($first == "e") {
         acceptCompany($second, $chat_id, $message_id);
     } else if ($first == "d") {
@@ -1324,3 +1338,12 @@ if (isset($update->message->text)) {
         file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Not matched.");
     }
 }
+
+
+// if ($msg != "/cancel" && ($buyer_telegram_id != NULL && $zone == NULL)) {
+        //     setCollectingValue($chat_id, "zone", "$msg");
+        //     file_get_contents($botAPI . "/sendmessage?chat_id=" . $chat_id . "&text=Please enter the Neighborhood");
+        // } else if ($msg != "/cancel" && ($zone != NULL && $neighborhood == NULL)) {
+        //     setCollectingValue($chat_id, "neighborhood", "$msg");
+        //     searchPickers($chat_id);
+        // } else 
